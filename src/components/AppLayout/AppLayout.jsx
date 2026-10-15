@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 
 import Header from "@/components/Header/Header";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import { SearchProvider } from "@/context/SearchContext";
 
 import styles from "./AppLayout.module.css";
 
@@ -30,52 +31,54 @@ export default function AppLayout({ children }) {
   }
 
   return (
-    <div className={styles.app}>
-      <Header onMenuClick={openSidebar} />
+    <SearchProvider>
+      <div className={styles.app}>
+        <Header onMenuClick={openSidebar} />
 
-      <div className={styles.layout}>
-        {/* Desktop Sidebar */}
-        <aside className={styles.desktopSidebar}>
-          <Sidebar />
-        </aside>
+        <div className={styles.layout}>
+          {/* Desktop Sidebar */}
+          <aside className={styles.desktopSidebar}>
+            <Sidebar />
+          </aside>
 
-        {/* Main Content */}
-        <main className={styles.main}>
-          <div className={styles.content}>{children}</div>
-        </main>
+          {/* Main Content */}
+          <main className={styles.main}>
+            <div className={styles.content}>{children}</div>
+          </main>
+        </div>
+
+        {/* Mobile Sidebar Drawer */}
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <>
+              <motion.button
+                type='button'
+                className={styles.backdrop}
+                aria-label='Close navigation'
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={closeSidebar}
+              />
+
+              <motion.aside
+                className={styles.mobileSidebar}
+                initial={{ x: "-100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "-100%" }}
+                transition={{
+                  type: "tween",
+                  duration: 0.25,
+                  ease: "easeInOut",
+                }}
+              >
+                <Sidebar onNavigate={closeSidebar} />
+              </motion.aside>
+            </>
+          )}
+        </AnimatePresence>
       </div>
-
-      {/* Mobile Sidebar Drawer */}
-      <AnimatePresence>
-        {isSidebarOpen && (
-          <>
-            <motion.button
-              type='button'
-              className={styles.backdrop}
-              aria-label='Close navigation'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              onClick={closeSidebar}
-            />
-
-            <motion.aside
-              className={styles.mobileSidebar}
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{
-                type: "tween",
-                duration: 0.25,
-                ease: "easeInOut",
-              }}
-            >
-              <Sidebar onNavigate={closeSidebar} />
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
-    </div>
+    </SearchProvider>
   );
 }

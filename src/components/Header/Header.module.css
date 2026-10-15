@@ -111,3 +111,80 @@
     gap: 0;
   }
 }
+
+
+
+/* --------------------------------------------------
+   Header Search
+-------------------------------------------------- */
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 10px;
+  width: 100%;
+  max-width: 520px;
+  min-width: 0;
+  height: 38px;
+  margin-inline: 32px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+  transition:
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.searchBox:focus-within {
+  border-color: var(--accent-color);
+}
+
+.searchBox input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 13px;
+}
+
+.searchBox input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.searchBox input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.clearSearch {
+  display: grid;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.clearSearch:hover {
+  background: var(--surface-bg);
+  color: var(--text-primary);
+}
+
+@media (max-width: 767px) {
+  .searchBox {
+    margin-inline: 12px;
+  }
+}

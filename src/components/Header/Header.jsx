@@ -2,18 +2,22 @@
 
 "use client";
 
-import { Menu, Sun, Moon } from "lucide-react";
+import { Menu, Sun, Moon, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+
+import { useSearch } from "@/context/SearchContext";
 
 import styles from "./Header.module.css";
 
 /* --------------------------------------------------
-   Header Component
+   Header
 -------------------------------------------------- */
 
 export default function Header({ onMenuClick }) {
   const [theme, setTheme] = useState("light");
   const themeButtonRef = useRef(null);
+
+  const { searchTerm, setSearchTerm } = useSearch();
 
   /* --------------------------------------------------
      Initialize Theme
@@ -21,6 +25,7 @@ export default function Header({ onMenuClick }) {
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("stash-theme");
+
     const preferredTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
     const initialTheme = savedTheme || preferredTheme;
@@ -30,7 +35,7 @@ export default function Header({ onMenuClick }) {
   }, []);
 
   /* --------------------------------------------------
-     Apply Theme
+     Theme Controls
   -------------------------------------------------- */
 
   function applyTheme(nextTheme) {
@@ -39,43 +44,24 @@ export default function Header({ onMenuClick }) {
     setTheme(nextTheme);
   }
 
-  /* --------------------------------------------------
-     Toggle Theme
-  -------------------------------------------------- */
-
   function toggleTheme() {
     const nextTheme = theme === "light" ? "dark" : "light";
-    const root = document.documentElement;
+    const button = themeButtonRef.current;
 
-    // Fall back to a normal theme change if unsupported.
-    if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (!button || !document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       applyTheme(nextTheme);
       return;
     }
 
-    // Use the theme button as the circular reveal origin.
-    const button = themeButtonRef.current;
-    const rect = button?.getBoundingClientRect();
+    const rect = button.getBoundingClientRect();
 
-    const x = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
-    const y = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+    document.documentElement.style.setProperty("--theme-x", `${rect.left + rect.width / 2}px`);
 
-    root.style.setProperty("--theme-x", `${x}px`);
-    root.style.setProperty("--theme-y", `${y}px`);
+    document.documentElement.style.setProperty("--theme-y", `${rect.top + rect.height / 2}px`);
 
-    const transition = document.startViewTransition(() => {
+    document.startViewTransition(() => {
       applyTheme(nextTheme);
     });
-
-    // Clean up after both transition animations have completed.
-    transition.finished
-      .catch(() => {
-        // The theme has already been applied; ignore animation errors.
-      })
-      .finally(() => {
-        root.style.removeProperty("--theme-x");
-        root.style.removeProperty("--theme-y");
-      });
   }
 
   /* --------------------------------------------------
@@ -85,48 +71,62 @@ export default function Header({ onMenuClick }) {
   return (
     <header className={styles.header}>
       <div className={styles.inner}>
+        {/* Brand and Navigation */}
         <div className={styles.brandGroup}>
           <button
             type='button'
             className={styles.menuButton}
-            aria-label='Open navigation'
             onClick={onMenuClick}
+            aria-label='Open navigation'
           >
-            <Menu
-              size={22}
-              strokeWidth={1.8}
-            />
+            <Menu size={21} />
           </button>
 
           <a
             className={styles.brand}
             href='/'
-            aria-label='Stash home'
           >
-            Stash<span className={styles.brandDot}>.</span>
+            Stash<span>.</span>
           </a>
         </div>
 
+        {/* Bookmark Search */}
+        <label className={styles.searchBox}>
+          <Search
+            size={18}
+            aria-hidden='true'
+          />
+
+          <input
+            type='search'
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+            placeholder='Search bookmarks...'
+            aria-label='Search bookmarks'
+          />
+
+          {searchTerm && (
+            <button
+              type='button'
+              className={styles.clearSearch}
+              onClick={() => setSearchTerm("")}
+              aria-label='Clear search'
+            >
+              <X size={16} />
+            </button>
+          )}
+        </label>
+
+        {/* Header Actions */}
         <div className={styles.actions}>
           <button
             ref={themeButtonRef}
             type='button'
             className={styles.themeButton}
-            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} theme`}
-            aria-pressed={theme === "dark"}
             onClick={toggleTheme}
+            aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
           >
-            {theme === "light" ? (
-              <Moon
-                size={19}
-                strokeWidth={1.8}
-              />
-            ) : (
-              <Sun
-                size={19}
-                strokeWidth={1.8}
-              />
-            )}
+            {theme === "light" ? <Moon size={19} /> : <Sun size={19} />}
           </button>
         </div>
       </div>

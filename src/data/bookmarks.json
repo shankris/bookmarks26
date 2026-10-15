@@ -1,0 +1,67 @@
+[
+  {
+    "id": "shadcn-ui",
+    "name": "shadcn/ui",
+    "url": "https://ui.shadcn.com/",
+    "description": "Beautifully designed components that you can copy and customize for your projects.",
+    "category": "UI Libraries",
+    "categoryId": "ui-libraries",
+    "rating": 5,
+    "visits": 58,
+    "addedAt": "2026-10-15",
+    "lastVisitedAt": "2026-10-15T18:28:00Z",
+    "domain": "ui.shadcn.com"
+  },
+  {
+    "id": "javascript-info",
+    "name": "The Modern JavaScript Tutorial",
+    "url": "https://javascript.info/",
+    "description": "A comprehensive guide to JavaScript, from the fundamentals to advanced concepts.",
+    "category": "Tutorials",
+    "categoryId": "tutorials",
+    "rating": 5,
+    "visits": 12,
+    "addedAt": "2026-10-14",
+    "lastVisitedAt": "2026-10-10T18:28:00Z",
+    "domain": "javascript.info"
+  },
+  {
+    "id": "lucide",
+    "name": "Lucide",
+    "url": "https://lucide.dev/",
+    "description": "A beautiful and consistent icon toolkit for designers and developers.",
+    "category": "Icons & Illustrations",
+    "categoryId": "icons",
+    "rating": 4,
+    "visits": 18,
+    "addedAt": "2026-10-13",
+    "lastVisitedAt": "2026-09-22T18:28:00Z",
+    "domain": "lucide.dev"
+  },
+  {
+    "id": "dribbble",
+    "name": "Dribbble",
+    "url": "https://dribbble.com/",
+    "description": "Explore creative work, interface designs, and inspiration from designers worldwide.",
+    "category": "Design Inspiration",
+    "categoryId": "inspiration",
+    "rating": 4,
+    "visits": 34,
+    "addedAt": "2026-10-12",
+    "lastVisitedAt": "2025-10-21T18:28:00Z",
+    "domain": "dribbble.com"
+  },
+  {
+    "id": "squoosh",
+    "name": "Squoosh",
+    "url": "https://squoosh.app/",
+    "description": "Compress and optimize images with a simple, browser-based image tool.",
+    "category": "Utilities",
+    "categoryId": "utilities",
+    "rating": 4,
+    "visits": 25,
+    "addedAt": "2026-10-11",
+    "lastVisitedAt": "2026-06-11T18:28:00Z",
+    "domain": "squoosh.app"
+  }
+]
