@@ -117,8 +117,10 @@ export default function HomePage() {
             YOUR PERSONAL LIBRARY
           </div>
 
-          <h1>All Roads to WebDev</h1>
-          <p>A thoughtfully curated space for the resources worth coming back to.</p>
+          <h1 className={styles.pageTitle}>
+            All roads to <span>WebDev</span>
+          </h1>
+          <div className={styles.subTitle}>A curated space for WebDev resources worth coming back to.</div>
         </div>
 
         <div
@@ -180,25 +182,6 @@ export default function HomePage() {
             </div>
           )}
         </div>
-      </section>
-
-      {/* Sorting */}
-      <section className={styles.toolbar}>
-        <label className={styles.sortControl}>
-          <span>Sort by</span>
-
-          <select
-            value={sortBy}
-            onChange={(event) => setSortBy(event.target.value)}
-            aria-label='Sort bookmarks'
-          >
-            <option value='recent'>Recently added</option>
-            <option value='name'>Name</option>
-            <option value='rating'>Top rated</option>
-            <option value='mostVisited'>Most visited</option>
-            <option value='recentlyVisited'>Recently visited</option>
-          </select>
-        </label>
       </section>
 
       {/* Bookmark Results */}

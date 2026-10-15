@@ -154,7 +154,7 @@ Search and Sorting
 }
 
 .clearSearch:hover {
-  background: var(--mainContentBg);
+  background: var(--grey-200);
   color: var(--headingCol);
 }
 
@@ -175,8 +175,6 @@ Search and Sorting
 .sortControl span {
   width: 44px
 }
-
-
 
 .sortControl select {
   max-width: 145px;
@@ -840,20 +838,22 @@ Reduced Motion
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 10px;
+  padding: 6px;
   border: 0;
-  border-radius: 7px;
+  border-radius: 2px;
   background: transparent;
   color: var(--headingCol);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   text-align: left;
   cursor: pointer;
 }
 
 .sortOption:hover {
-  background: var(--mainContentBg);
+  background: var(--grey-100);
 }
+
+
 
 .sortOptionActive {
   color: var(--accentColor);
@@ -862,4 +862,15 @@ Reduced Motion
 
 .sortCheck {
   font-size: 14px;
+}
+
+h1.pageTitle {
+  font-weight: 300;
+  font-size: clamp(27px, 4vw, 36px);
+}
+
+.subTitle {
+  font-size: 14px;
+  color: var(--mutedCol);
+  font-weight: 300;
 }
