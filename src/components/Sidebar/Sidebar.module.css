@@ -1,0 +1,302 @@
+/* src/components/Sidebar/Sidebar.module.css */
+
+/* --------------------------------------------------
+   Sidebar Base
+-------------------------------------------------- */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-height: 100%;
+  padding: var(--space-5) 0;
+  color: var(--sidebar-text);
+  background: var(--surface-bg);
+}
+
+/* --------------------------------------------------
+   Sections
+-------------------------------------------------- */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: var(--space-3);
+}
+
+.sectionLabel {
+  margin: 0;
+  color: var(--sidebar-text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  line-height: var(--line-height-normal);
+  padding: 0 0 0 6px;
+}
+
+/* --------------------------------------------------
+   Main Navigation
+-------------------------------------------------- */
+
+.navList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 30px;
+  padding: 0 var(--space-3);
+  color: var(--sidebar-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  /* border: var(--border-width) solid transparent; */
+  /* border-radius: var(--radius-md); */
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.navLink:hover {
+  color: var(--sidebar-text);
+  background: var(--sidebar-hover);
+}
+
+.navLink.active {
+  color: var(--sidebar-text);
+  background: var(--sidebar-surface);
+  border-color: var(--sidebar-border);
+}
+
+.navLink svg {
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------
+   Icon Buttons
+-------------------------------------------------- */
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--sidebar-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.iconButton:hover {
+  color: var(--sidebar-text);
+  background: var(--sidebar-hover);
+}
+
+/* --------------------------------------------------
+   Category Accordion
+-------------------------------------------------- */
+
+.categoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.categoryGroup {
+  min-width: 0;
+}
+
+.categoryButton {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 30px;
+  padding: 0 var(--space-3);
+  color: var(--sidebar-text);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.categoryButton:hover {
+  background: var(--sidebar-hover);
+}
+
+.categoryButton>svg {
+  flex-shrink: 0;
+  color: var(--sidebar-text-muted);
+}
+
+.categoryName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: var(--font-size-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  flex-shrink: 0;
+  color: var(--sidebar-text-muted);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------
+   Subcategories
+-------------------------------------------------- */
+
+.subcategoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0 6px 22px;
+  padding-left: var(--space-3);
+  border-left: var(--border-width) solid var(--sidebar-border);
+}
+
+.subcategoryLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 20px;
+  padding: 0 var(--space-4) 0 0;
+  color: var(--sidebar-text-muted);
+  font-size: 0.825rem;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+.subcategoryLink:hover {
+  color: var(--sidebar-text);
+  background: var(--sidebar-hover);
+}
+
+/* --------------------------------------------------
+   Community Contribution
+-------------------------------------------------- */
+
+.contributeSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding: var(--space-4);
+  background: var(--sidebar-surface);
+  border: var(--border-width) solid var(--sidebar-border);
+  border-radius: var(--radius-lg);
+}
+
+.contributeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--sidebar-text);
+  background: var(--sidebar-hover);
+  border-radius: var(--radius-md);
+}
+
+.contributeText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.contributeTitle {
+  margin: 0;
+  color: var(--sidebar-text);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+}
+
+.contributeDescription {
+  margin: 0;
+  color: var(--sidebar-text-muted);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+}
+
+.addLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 38px;
+  padding: 0 var(--space-3);
+  color: var(--sidebar-text);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  background: transparent;
+  border: var(--border-width) solid var(--sidebar-border);
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.addLink:hover {
+  background: var(--sidebar-hover);
+  border-color: var(--sidebar-text-muted);
+}
+
+/* --------------------------------------------------
+   Keyboard Focus
+-------------------------------------------------- */
+
+.navLink:focus-visible,
+.categoryButton:focus-visible,
+.subcategoryLink:focus-visible,
+.iconButton:focus-visible,
+.addLink:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------
+   Reduced Motion
+-------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .navLink,
+  .iconButton,
+  .categoryButton,
+  .subcategoryLink,
+  .addLink {
+    transition: none;
+  }
+}

@@ -1,0 +1,104 @@
+/* src/components/AppLayout/AppLayout.module.css */
+
+/* --------------------------------------------------
+   Application Shell
+-------------------------------------------------- */
+
+.app {
+  min-height: 100vh;
+  background: var(--page-bg);
+}
+
+/* --------------------------------------------------
+   Main Layout
+-------------------------------------------------- */
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+.desktopSidebar {
+  display: none;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: calc(100vh - var(--header-height));
+}
+
+.content {
+  width: 100%;
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding: var(--page-padding);
+}
+
+/* --------------------------------------------------
+   Mobile Sidebar Drawer
+-------------------------------------------------- */
+
+.backdrop {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  z-index: 200;
+  width: 100%;
+  height: calc(100dvh - var(--header-height));
+  padding: 0;
+  border: 0;
+  background: var(--overlay-bg);
+  cursor: pointer;
+}
+
+.mobileSidebar {
+  position: fixed;
+  top: var(--header-height);
+  bottom: 0;
+  left: 0;
+  z-index: 201;
+  width: min(var(--sidebar-width), 85vw);
+  overflow: hidden;
+  background: var(--sidebar-bg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* --------------------------------------------------
+   Desktop Layout
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .layout {
+    width: 100%;
+    max-width: var(--content-max-width);
+    margin-inline: auto;
+    gap: var(--space-6);
+    padding-inline: var(--page-padding);
+  }
+
+  .desktopSidebar {
+    position: sticky;
+    top: var(--header-height);
+    display: block;
+    flex: 0 0 var(--sidebar-width);
+    width: var(--sidebar-width);
+    height: calc(100vh - var(--header-height));
+    overflow-y: auto;
+    background: var(--sidebar-bg);
+    /* border-radius: var(--radius-md); */
+  }
+
+  .main {
+    flex: 1;
+  }
+
+  .content {
+    padding: var(--space-4) 0;
+  }
+
+  .backdrop,
+  .mobileSidebar {
+    display: none;
+  }
+}

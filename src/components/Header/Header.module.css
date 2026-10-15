@@ -1,0 +1,113 @@
+/* src/components/Header/Header.module.css */
+
+/* --------------------------------------------------
+   Fixed Header
+-------------------------------------------------- */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: var(--header-height);
+  background: var(--surface-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* --------------------------------------------------
+   Header Inner Container
+-------------------------------------------------- */
+
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--content-max-width);
+  height: 100%;
+  margin-inline: auto;
+  padding-inline: var(--page-padding);
+}
+
+.brandGroup,
+.actions {
+  display: flex;
+  align-items: center;
+}
+
+.brandGroup {
+  gap: var(--space-3);
+}
+
+.actions {
+  gap: var(--space-2);
+}
+
+/* --------------------------------------------------
+   Brand
+-------------------------------------------------- */
+
+.brand {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 700;
+  letter-spacing: -0.055em;
+  text-decoration: none;
+}
+
+.brandDot {
+  color: var(--accent-color);
+}
+
+/* --------------------------------------------------
+   Header Buttons
+-------------------------------------------------- */
+
+.menuButton,
+.themeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.menuButton:hover,
+.themeButton:hover {
+  color: var(--text-primary);
+  background: var(--surface-secondary);
+  border-color: var(--border-color);
+}
+
+.menuButton:focus-visible,
+.themeButton:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------
+   Responsive Header
+-------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .menuButton {
+    display: none;
+  }
+
+  .brandGroup {
+    gap: 0;
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "smartViews": [
+    {
+      "id": "all-bookmarks",
+      "label": "All Bookmarks",
+      "href": "/",
+      "icon": "LayoutGrid"
+    },
+    {
+      "id": "recently-added",
+      "label": "Recently Added",
+      "href": "/recent",
+      "icon": "Clock3"
+    },
+    {
+      "id": "frequently-visited",
+      "label": "Frequently Visited",
+      "href": "/frequent",
+      "icon": "Bookmark"
+    },
+    {
+      "id": "visit-due",
+      "label": "Visit Due",
+      "href": "/visit-due",
+      "icon": "RotateCcw"
+    },
+    {
+      "id": "visit-history",
+      "label": "Visit History",
+      "href": "/history",
+      "icon": "History"
+    }
+  ],
+  "categories": [
+    {
+      "id": "development",
+      "label": "Development",
+      "count": 12,
+      "subcategories": [
+        {
+          "id": "javascript",
+          "label": "JavaScript",
+          "count": 5
+        },
+        {
+          "id": "react",
+          "label": "React",
+          "count": 4
+        },
+        {
+          "id": "nextjs",
+          "label": "Next.js",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "design",
+      "label": "Design",
+      "count": 8,
+      "subcategories": [
+        {
+          "id": "ui-ux",
+          "label": "UI / UX",
+          "count": 5
+        },
+        {
+          "id": "inspiration",
+          "label": "Inspiration",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "productivity",
+      "label": "Productivity",
+      "count": 6,
+      "subcategories": [
+        {
+          "id": "tools",
+          "label": "Tools",
+          "count": 4
+        },
+        {
+          "id": "learning",
+          "label": "Learning",
+          "count": 2
+        }
+      ]
+    }
+  ],
+  "contribution": {
+    "title": "Found something useful?",
+    "description": "Share a website with the community.",
+    "buttonLabel": "Add bookmark",
+    "href": "/add"
+  }
+}

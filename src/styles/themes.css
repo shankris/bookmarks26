@@ -1,0 +1,119 @@
+/* src/styles/themes.css */
+
+/* --------------------------------------------------
+   Light Theme — Default
+-------------------------------------------------- */
+
+:root,
+html[data-theme="light"] {
+  color-scheme: light;
+
+  --grey-100: #f1f2f4;
+  --grey-200: #dfe2e7;
+  --grey-300: #bfc5ce;
+  --grey-400: #8b93a1;
+
+  /* Page and Surfaces */
+  --page-bg: #f7f6f2;
+  --surface-bg: #ffffff;
+  --surface-secondary: #f0f1f3;
+  --surface-hover: #e9edf2;
+
+  /* --------------------------------------------------
+   Sidebar — Light Theme
+-------------------------------------------------- */
+
+  --sidebar-bg: #ffffff;
+  --sidebar-surface: #f0f2f5;
+  --sidebar-hover: #e9edf2;
+  --sidebar-text: #202938;
+  --sidebar-text-muted: #687386;
+  --sidebar-border: #e1e4e8;
+
+  /* Text */
+  --text-primary: #202938;
+  --text-secondary: #687386;
+  --text-muted: #8993a2;
+  --text-inverse: #ffffff;
+
+  /* Accent */
+  --accent-color: #536b8a;
+  --accent-hover: #405875;
+  --accent-subtle: #e8edf4;
+
+  /* Borders */
+  --border-color: #e1e4e8;
+  --border-strong: #cbd1d9;
+
+  /* Feedback */
+  --success-color: #27845c;
+  --warning-color: #b7791f;
+  --danger-color: #c44747;
+  --info-color: #3e72ae;
+
+  /* Ratings */
+  --star-color: #d6a64f;
+
+  /* Overlays */
+  --overlay-bg: rgb(20 27 38 / 45%);
+}
+
+/* --------------------------------------------------
+   Dark Theme
+-------------------------------------------------- */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --grey-100: #303946;
+  --grey-200: #465160;
+  --grey-300: #697587;
+  --grey-400: #a0a9b7;
+
+  /* Page and Surfaces */
+  --page-bg: #171d27;
+  --surface-bg: #222b38;
+  --surface-secondary: #293444;
+  --surface-hover: #344154;
+
+  /* --------------------------------------------------
+   Sidebar — Dark Theme
+-------------------------------------------------- */
+
+  --sidebar-bg: #111925;
+  --sidebar-surface: #202b3c;
+  --sidebar-hover: #2c394d;
+  --sidebar-text: #edf1f7;
+  --sidebar-text-muted: #a7b1c1;
+  --sidebar-border: #354050;
+
+  /* Text */
+  --text-primary: #edf1f7;
+  --text-secondary: #a7b1c1;
+  --text-muted: #8995a7;
+  --text-inverse: #171d27;
+
+  /* Accent */
+  --accent-color: #9bb4d6;
+  --accent-hover: #b7cbe5;
+  --accent-subtle: #2e4057;
+
+  /* Borders */
+  --border-color: #354050;
+  --border-strong: #4a586b;
+
+  /* Feedback */
+  --success-color: #66c99a;
+  --warning-color: #edbd69;
+  --danger-color: #f07878;
+  --info-color: #83b6f0;
+
+  /* Ratings */
+  --star-color: #e2b85f;
+
+  /* Overlays */
+  --overlay-bg: rgb(0 0 0 / 65%);
+
+
+
+}
