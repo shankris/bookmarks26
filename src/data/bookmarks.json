@@ -1,7 +1,7 @@
 [
   {
     "id": "shadcn-ui",
-    "name": "shadcn/ui",
+    "name": "Shadcn UI",
     "url": "https://ui.shadcn.com/",
     "description": "Beautifully designed components that you can copy and customize for your projects.",
     "category": "UI Libraries",
@@ -14,7 +14,7 @@
   },
   {
     "id": "javascript-info",
-    "name": "The Modern JavaScript Tutorial",
+    "name": "Modern JavaScript Tutorial",
     "url": "https://javascript.info/",
     "description": "A comprehensive guide to JavaScript, from the fundamentals to advanced concepts.",
     "category": "Tutorials",

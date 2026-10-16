@@ -87,7 +87,6 @@ export default function Sidebar({ onNavigate }) {
 
         <div className={styles.navList}>{smartViews.map((item) => renderNavLink(item))}</div>
       </section>
-
       {/* Categories */}
       <section className={styles.section}>
         <p className={styles.sectionLabel}>CATEGORIES</p>
@@ -134,8 +133,7 @@ export default function Sidebar({ onNavigate }) {
           })}
         </div>
       </section>
-
-      {/* Contribution */}
+      {/* Contribution
       <section className={styles.contributeSection}>
         <div className={styles.contributeIcon}>
           <Compass
@@ -158,7 +156,7 @@ export default function Sidebar({ onNavigate }) {
           <Plus size={16} />
           {contribution.buttonLabel}
         </Link>
-      </section>
+      </section> */}
     </nav>
   );
 }

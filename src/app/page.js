@@ -117,8 +117,8 @@ export default function HomePage() {
             YOUR PERSONAL LIBRARY
           </div>
 
-          <h1 className={styles.pageTitle}>
-            All roads to <span>WebDev</span>
+          <h1>
+            Lets get Hyper <span>linked</span>
           </h1>
           <div className={styles.subTitle}>A curated space for WebDev resources worth coming back to.</div>
         </div>
@@ -240,10 +240,10 @@ export default function HomePage() {
                 <p>{bookmark.description}</p>
               </div>
 
-              <div className={styles.lastVisit}>
+              {/* <div className={styles.lastVisit}>
                 <span>Last visit</span>
                 <span className={styles.lastVisitValue}>{formatRelativeTime(bookmark.lastVisitedAt)}</span>
-              </div>
+              </div> */}
 
               <div className={styles.cardFooter}>
                 <div
@@ -268,7 +268,10 @@ export default function HomePage() {
                   <span>{bookmark.visits ?? 0}</span>
                 </div>
 
-                <span className={styles.addedDate}>Added {formatDate(bookmark.addedAt)}</span>
+                <span className={styles.addedDate}>
+                  {/* Added {formatDate(bookmark.addedAt)} */}
+                  Visit: {formatRelativeTime(bookmark.lastVisitedAt)}
+                </span>
               </div>
             </article>
           ))}

@@ -86,7 +86,7 @@ export default function Header({ onMenuClick }) {
             className={styles.brand}
             href='/'
           >
-            Stash<span>.</span>
+            Hyper<span>.</span>
           </a>
         </div>
 
