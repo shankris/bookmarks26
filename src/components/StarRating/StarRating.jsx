@@ -33,8 +33,6 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
 
   const selectedRating = Number.isInteger(numericValue) && numericValue >= 1 && numericValue <= 5 ? numericValue : 0;
 
-  const displayedRating = hoverRating || selectedRating;
-
   /* --------------------------------------------------
      Handle Rating Selection
   -------------------------------------------------- */
@@ -50,11 +48,15 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
   }
 
   /* --------------------------------------------------
-     Render Star Rating
+     Render Component
   -------------------------------------------------- */
 
   return (
     <div className={styles.rating}>
+      {/* ----------------------------------------------
+         Stars Row
+      ---------------------------------------------- */}
+
       <div
         className={styles.stars}
         role='radiogroup'
@@ -66,24 +68,30 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
           const ratingValue = index + 1;
           const inputId = `${generatedId}-rating-${ratingValue}`;
 
-          const isActive = ratingValue <= displayedRating;
+          const isSelected = ratingValue <= selectedRating;
+          const isHovered = hoverRating > 0 && ratingValue <= hoverRating;
+
           const shouldAnimate = animationVersion > 0 && ratingValue <= animationRating;
+
+          /* Match the original stagger calculation. */
 
           const delayIndex = shouldAnimate && ratingValue > animationFrom + 1 ? ratingValue - animationFrom - 1 : 0;
 
           const delayClass = delayIndex >= 1 && delayIndex <= 4 ? styles[`delay${delayIndex}`] : "";
 
+          const labelClassName = [styles.label, isSelected ? styles.selected : "", isHovered ? styles.hovered : "", shouldAnimate ? styles.animate : "", delayClass].filter(Boolean).join(" ");
+
           return (
             <label
               key={inputId}
               htmlFor={inputId}
-              className={[styles.label, isActive ? styles.active : "", shouldAnimate ? styles.animate : "", delayClass].filter(Boolean).join(" ")}
+              className={labelClassName}
+              title={label}
               onMouseEnter={() => {
                 if (!disabled) {
                   setHoverRating(ratingValue);
                 }
               }}
-              title={label}
             >
               <input
                 id={inputId}
@@ -111,11 +119,10 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
                 <g transform='translate(16,16)'>
                   <circle
                     className={styles.starRing}
-                    cx='0'
-                    cy='0'
-                    r='8'
                     fill='none'
+                    stroke='#000'
                     strokeWidth='16'
+                    r='8'
                     transform='scale(0)'
                   />
                 </g>
@@ -123,6 +130,7 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
                 {/* Star Outline and Fill */}
 
                 <g
+                  stroke='#000'
                   strokeWidth='2'
                   strokeLinecap='round'
                   strokeLinejoin='round'
@@ -137,10 +145,11 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
                     <polygon
                       className={styles.starFill}
                       points='0,15 4.41,6.07 14.27,4.64 7.13,-2.32 8.82,-12.14 0,-7.5 -8.82,-12.14 -7.13,-2.32 -14.27,4.64 -4.41,6.07'
+                      fill='#000'
                     />
                   </g>
 
-                  {/* Animated Rays */}
+                  {/* Five Animated Rays */}
 
                   <g
                     transform='translate(16,16)'
@@ -153,7 +162,6 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
                         className={styles.starLine}
                         transform={`rotate(${rotation})`}
                         points='0 4,0 16'
-                        fill='none'
                       />
                     ))}
                   </g>
@@ -164,9 +172,9 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
         })}
       </div>
 
-      {/* --------------------------------------------------
-         Rating Description — Separate Centered Row
-      -------------------------------------------------- */}
+      {/* ----------------------------------------------
+         Rating Description Row
+      ---------------------------------------------- */}
 
       <div className={styles.descriptionRow}>
         <p
@@ -174,7 +182,7 @@ export default function StarRating({ ratings = DEFAULT_RATINGS, value = 0, onCha
           aria-live='polite'
           aria-atomic='true'
         >
-          {displayedRating > 0 ? labels[displayedRating - 1] : ""}
+          {labels[selectedRating - 1] || ""}
         </p>
       </div>
     </div>

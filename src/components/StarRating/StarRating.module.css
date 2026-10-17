@@ -1,7 +1,7 @@
 /* src/components/StarRating/StarRating.module.css */
 
 /* --------------------------------------------------
-   Rating Variables
+   Rating Container
 -------------------------------------------------- */
 
 .rating {
@@ -66,7 +66,7 @@
 }
 
 /* --------------------------------------------------
-   Star Ring, Fill, Rays and Stroke
+   Animation Defaults
 -------------------------------------------------- */
 
 .starRing,
@@ -84,14 +84,12 @@
   stroke: var(--rating-yellow);
 }
 
-.starRing {
-  transform-box: fill-box;
-  transform-origin: center;
-}
+/* --------------------------------------------------
+   Star Fill
+-------------------------------------------------- */
 
 .starFill {
   fill: var(--rating-yellow);
-  stroke: var(--rating-yellow);
   transform: scale(0);
   transform-box: fill-box;
   transform-origin: center;
@@ -100,35 +98,41 @@
     transform var(--rating-duration) var(--rating-bezier);
 }
 
+/* --------------------------------------------------
+   Star Rays
+-------------------------------------------------- */
+
 .starLine {
   fill: none;
   stroke-dasharray: 12 13;
   stroke-dashoffset: -13;
 }
 
+/* --------------------------------------------------
+   Star Outline
+-------------------------------------------------- */
+
 .starStroke {
   fill: none;
   stroke: var(--rating-stroke);
   transform-box: fill-box;
   transform-origin: center;
-  transition:
-    stroke var(--rating-duration),
-    transform var(--rating-duration) var(--rating-bezier);
+  transition: stroke var(--rating-duration);
 }
 
 /* --------------------------------------------------
    Hover Appearance
 -------------------------------------------------- */
 
-.label.active .starStroke {
+.label.hovered .starStroke {
   stroke: var(--rating-yellow);
   transform: scale(1);
 }
 
-.label:not(.active) .starFill {
+/* Unselected stars remain unfilled on hover, as in the original. */
+
+.label:not(.selected) .starFill {
   fill: var(--rating-yellow-transparent);
-  stroke: var(--rating-yellow-transparent);
-  transform: scale(0);
 }
 
 /* --------------------------------------------------
@@ -184,7 +188,7 @@
 }
 
 /* --------------------------------------------------
-   Rating Description Row
+   Description Row
 -------------------------------------------------- */
 
 .descriptionRow {
