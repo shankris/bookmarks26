@@ -3,7 +3,12 @@
 "use client";
 
 import { useRef, useState } from "react";
+import StarRating from "@/components/StarRating/StarRating";
 import styles from "./BookmarkForm.module.css";
+
+/* --------------------------------------------------
+URL Helpers
+-------------------------------------------------- */
 
 function normalizeUrl(value) {
   const trimmed = value.trim();
@@ -17,12 +22,16 @@ function getDomain(value) {
   return url.hostname.toLowerCase().replace(/^www\./, "");
 }
 
+/* --------------------------------------------------
+Bookmark Form
+-------------------------------------------------- */
+
 export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [rating, setRating] = useState("5");
+  const [rating, setRating] = useState("0");
 
   const [preview, setPreview] = useState(null);
   const [previewStatus, setPreviewStatus] = useState("idle");
@@ -31,6 +40,10 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
 
   const requestId = useRef(0);
   const lastFetchedUrl = useRef("");
+
+  /* --------------------------------------------------
+  Fetch Website Preview
+  -------------------------------------------------- */
 
   async function fetchPreview(value) {
     const trimmed = value.trim();
@@ -83,6 +96,7 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
 
       // Populate fields only when empty, so edits are not overwritten.
       setName((current) => (current.trim() ? current : data.title || ""));
+
       setDescription((current) => (current.trim() ? current : data.description || ""));
     } catch (fetchError) {
       if (currentRequestId !== requestId.current) return;
@@ -107,17 +121,25 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
     }
   }
 
+  /* --------------------------------------------------
+  Handle URL Changes
+  -------------------------------------------------- */
+
   function handleUrlChange(value) {
     setUrl(value);
     setError("");
 
-    // Ignore an older response if the user starts entering a different URL.
+    // Ignore an older response if the user enters a different URL.
     requestId.current += 1;
     lastFetchedUrl.current = "";
     setPreview(null);
     setPreviewStatus("idle");
     setPreviewError("");
   }
+
+  /* --------------------------------------------------
+  Handle Form Submission
+  -------------------------------------------------- */
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -159,16 +181,22 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
       siteName: preview?.siteName || domain,
     });
 
+    // Reset the form.
     setUrl("");
     setName("");
     setDescription("");
     setCategory("");
-    setRating("5");
+    setRating("0");
     setPreview(null);
     setPreviewStatus("idle");
     setPreviewError("");
+    setError("");
     lastFetchedUrl.current = "";
   }
+
+  /* --------------------------------------------------
+  Render Form
+  -------------------------------------------------- */
 
   return (
     <form
@@ -176,6 +204,7 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
       onSubmit={handleSubmit}
     >
       {/* Website URL */}
+
       <div className={styles.formField}>
         <label htmlFor='bookmark-url'>Website URL *</label>
 
@@ -199,7 +228,8 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
         <p className={styles.formHint}>Enter a URL to retrieve the website title, description, favicon, and preview image.</p>
       </div>
 
-      {/* Preview loading */}
+      {/* Preview Loading */}
+
       {previewStatus === "loading" && (
         <p
           className={styles.previewStatus}
@@ -209,13 +239,14 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
         </p>
       )}
 
-      {/* Social-style preview */}
+      {/* Website Preview */}
+
       {preview && (
         <section
           className={styles.linkPreview}
           aria-label='Website link preview'
         >
-          {preview.imageUrl ? (
+          {preview.imageUrl && (
             <div className={styles.previewImageFrame}>
               <img
                 src={preview.imageUrl}
@@ -228,7 +259,7 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
                 }}
               />
             </div>
-          ) : null}
+          )}
 
           <div className={styles.previewBody}>
             <div className={styles.previewDomain}>
@@ -254,6 +285,8 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
         </section>
       )}
 
+      {/* Preview Error */}
+
       {previewError && (
         <p
           className={styles.formHint}
@@ -263,9 +296,11 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
         </p>
       )}
 
-      {/* Editable website name */}
+      {/* Website Name */}
+
       <div className={styles.formField}>
         <label htmlFor='bookmark-name'>Name *</label>
+
         <input
           id='bookmark-name'
           value={name}
@@ -275,9 +310,11 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
         />
       </div>
 
-      {/* Editable description */}
+      {/* Description */}
+
       <div className={styles.formField}>
         <label htmlFor='bookmark-description'>Description</label>
+
         <textarea
           id='bookmark-description'
           value={description}
@@ -288,8 +325,10 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
       </div>
 
       {/* Category */}
+
       <div className={styles.formField}>
         <label htmlFor='bookmark-category'>Category *</label>
+
         <input
           id='bookmark-category'
           list='bookmark-categories'
@@ -309,56 +348,23 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
         </datalist>
       </div>
 
-      {/* Rating */}
+      {/* Reusable Star Rating */}
+
       <div className={styles.formField}>
         <span className={styles.ratingLabel}>Rating</span>
 
-        <div
-          className={styles.rating}
-          role='radiogroup'
-          aria-label='Bookmark rating'
-        >
-          {[1, 2, 3, 4, 5].map((value) => {
-            const labels = ["Good", "Great", "Excellent", "Awesome", "Fantastic"];
-            const selected = Number(rating) === value;
-
-            return (
-              <label
-                key={value}
-                className={styles.ratingOption}
-                title={`${value} ${value === 1 ? "star" : "stars"} — ${labels[value - 1]}`}
-              >
-                <input
-                  className={styles.ratingInput}
-                  type='radio'
-                  name='bookmark-rating'
-                  value={value}
-                  checked={selected}
-                  onChange={() => setRating(String(value))}
-                  aria-label={`${value} ${value === 1 ? "star" : "stars"} — ${labels[value - 1]}`}
-                />
-
-                <svg
-                  className={`${styles.ratingStar} ${selected || Number(rating) >= value ? styles.ratingStarSelected : ""}`}
-                  viewBox='0 0 32 32'
-                  aria-hidden='true'
-                >
-                  <polygon points='16,2 20.3,11 30,12.4 23,19.2 24.7,29 16,24.4 7.3,29 9,19.2 2,12.4 11.7,11' />
-                </svg>
-              </label>
-            );
-          })}
-        </div>
-
-        <span
-          className={styles.ratingDescription}
-          aria-live='polite'
-        >
-          {["Good", "Great", "Excellent", "Awesome", "Fantastic"][Number(rating) - 1]}
-        </span>
+        <StarRating
+          name='bookmark-rating'
+          ratings={["Good", "Great", "Excellent", "Awesome", "Fantastic"]}
+          value={Number(rating)}
+          onChange={(nextRating) => setRating(String(nextRating))}
+          size={32}
+        />
       </div>
 
       <p className={styles.formHint}>Bookmark IDs, category IDs, dates, and visit counts are generated automatically.</p>
+
+      {/* Form Error */}
 
       {error && (
         <p
@@ -368,6 +374,8 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
           {error}
         </p>
       )}
+
+      {/* Form Actions */}
 
       <div className={styles.formActions}>
         <button

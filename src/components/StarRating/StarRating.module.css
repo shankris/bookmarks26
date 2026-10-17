@@ -1,0 +1,91 @@
+/* src/components/StarRating/StarRating.module.css */
+
+/* --------------------------------------------------
+Rating Container
+-------------------------------------------------- */
+
+.rating {
+  width: 200px;
+  color: var(--headingCol, #17181c);
+}
+
+/* --------------------------------------------------
+Stars Row
+-------------------------------------------------- */
+
+.stars {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 0.375em;
+}
+
+/* --------------------------------------------------
+   Stars Layout
+-------------------------------------------------- */
+
+.stars {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  padding-bottom: 0.375em;
+}
+
+/* --------------------------------------------------
+   Star Labels and Inputs
+-------------------------------------------------- */
+
+.label {
+  display: block;
+  padding: 0.125em;
+  cursor: pointer;
+  line-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+}
+
+.input:focus-visible+.star {
+  outline: 2px solid var(--accentColor, #255ff4);
+  outline-offset: 3px;
+}
+
+.rating:has(.input:disabled) .label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* --------------------------------------------------
+   Star SVG
+-------------------------------------------------- */
+
+.star {
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------
+Description Row
+-------------------------------------------------- */
+
+.descriptionRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  min-height: 1.25em;
+}
+
+.display {
+  margin: 0;
+  font-size: 1em;
+  font-weight: 500;
+  line-height: 1.25;
+  text-align: center;
+  pointer-events: none;
+}
