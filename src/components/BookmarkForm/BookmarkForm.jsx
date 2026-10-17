@@ -225,7 +225,9 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
           required
         />
 
-        <p className={styles.formHint}>Enter a URL to retrieve the website title, description, favicon, and preview image.</p>
+        <p className={styles.formHint}>
+          Enter a URL and press <i>Enter</i> to retrieve site details.
+        </p>
       </div>
 
       {/* Preview Loading */}
@@ -298,7 +300,7 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
 
       {/* Website Name */}
 
-      <div className={styles.formField}>
+      {/* <div className={styles.formField}>
         <label htmlFor='bookmark-name'>Name *</label>
 
         <input
@@ -308,11 +310,11 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
           placeholder='Website name'
           required
         />
-      </div>
+      </div> */}
 
       {/* Description */}
 
-      <div className={styles.formField}>
+      {/* <div className={styles.formField}>
         <label htmlFor='bookmark-description'>Description</label>
 
         <textarea
@@ -322,7 +324,7 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
           placeholder='What makes this resource useful?'
           rows={4}
         />
-      </div>
+      </div> */}
 
       {/* Category */}
 
@@ -361,8 +363,6 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
           size={32}
         />
       </div>
-
-      <p className={styles.formHint}>Bookmark IDs, category IDs, dates, and visit counts are generated automatically.</p>
 
       {/* Form Error */}
 

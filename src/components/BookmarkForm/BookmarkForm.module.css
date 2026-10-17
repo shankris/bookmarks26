@@ -85,10 +85,9 @@
    Form Hint
 -------------------------------------------------- */
 
-.formHint {
-  margin: -4px 0 0;
+p.formHint {
   color: var(--mutedColor, #6b7280);
-  font-size: 0.8rem;
+  font-size: 12px;
   line-height: 1.5;
 }
 
