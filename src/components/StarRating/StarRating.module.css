@@ -89,3 +89,19 @@ Description Row
   text-align: center;
   pointer-events: none;
 }
+
+/* --------------------------------------------------
+   Star SVG and Fill Transition
+-------------------------------------------------- */
+
+.star {
+  display: block;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.star polygon {
+  transition:
+    fill 880ms ease-in-out,
+    stroke 880ms ease-in-out;
+}
