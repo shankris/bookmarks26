@@ -1,31 +1,26 @@
 /* src/components/StarRating/StarRating.module.css */
 
 /* --------------------------------------------------
-Rating Container
+   Rating Variables
 -------------------------------------------------- */
 
 .rating {
+  --rating-yellow: var(--yellow, #f4a825);
+  --rating-yellow-transparent: rgba(244, 168, 37, 0);
+  --rating-stroke: #c7cad1;
+  --rating-duration: 0.3s;
+  --rating-bezier: cubic-bezier(0.42, 0, 0.58, 1);
+
   width: 200px;
   color: var(--headingCol, #17181c);
 }
 
 /* --------------------------------------------------
-Stars Row
+   Stars Row
 -------------------------------------------------- */
 
 .stars {
   display: flex;
-  justify-content: center;
-  padding-bottom: 0.375em;
-}
-
-/* --------------------------------------------------
-   Stars Layout
--------------------------------------------------- */
-
-.stars {
-  display: flex;
-  position: relative;
   justify-content: center;
   padding-bottom: 0.375em;
 }
@@ -71,7 +66,125 @@ Stars Row
 }
 
 /* --------------------------------------------------
-Description Row
+   Star Ring, Fill, Rays and Stroke
+-------------------------------------------------- */
+
+.starRing,
+.starFill,
+.starLine,
+.starStroke {
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+
+.starRing,
+.starFill,
+.starLine {
+  stroke: var(--rating-yellow);
+}
+
+.starRing {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.starFill {
+  fill: var(--rating-yellow);
+  stroke: var(--rating-yellow);
+  transform: scale(0);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    fill var(--rating-duration) var(--rating-bezier),
+    transform var(--rating-duration) var(--rating-bezier);
+}
+
+.starLine {
+  fill: none;
+  stroke-dasharray: 12 13;
+  stroke-dashoffset: -13;
+}
+
+.starStroke {
+  fill: none;
+  stroke: var(--rating-stroke);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    stroke var(--rating-duration),
+    transform var(--rating-duration) var(--rating-bezier);
+}
+
+/* --------------------------------------------------
+   Hover Appearance
+-------------------------------------------------- */
+
+.label.active .starStroke {
+  stroke: var(--rating-yellow);
+  transform: scale(1);
+}
+
+.label:not(.active) .starFill {
+  fill: var(--rating-yellow-transparent);
+  stroke: var(--rating-yellow-transparent);
+  transform: scale(0);
+}
+
+/* --------------------------------------------------
+   Animation Trigger
+-------------------------------------------------- */
+
+.label.animate .starRing {
+  animation-name: starRing;
+}
+
+.label.animate .starStroke {
+  animation-name: starStroke;
+}
+
+.label.animate .starLine {
+  animation-name: starLine;
+}
+
+.label.animate .starFill {
+  animation-name: starFill;
+}
+
+/* --------------------------------------------------
+   Staggered Animation Delays
+-------------------------------------------------- */
+
+.delay1 .starRing,
+.delay1 .starFill,
+.delay1 .starLine,
+.delay1 .starStroke {
+  animation-delay: 0.05s;
+}
+
+.delay2 .starRing,
+.delay2 .starFill,
+.delay2 .starLine,
+.delay2 .starStroke {
+  animation-delay: 0.1s;
+}
+
+.delay3 .starRing,
+.delay3 .starFill,
+.delay3 .starLine,
+.delay3 .starStroke {
+  animation-delay: 0.15s;
+}
+
+.delay4 .starRing,
+.delay4 .starFill,
+.delay4 .starLine,
+.delay4 .starStroke {
+  animation-delay: 0.2s;
+}
+
+/* --------------------------------------------------
+   Rating Description Row
 -------------------------------------------------- */
 
 .descriptionRow {
@@ -91,17 +204,109 @@ Description Row
 }
 
 /* --------------------------------------------------
-   Star SVG and Fill Transition
+   Star Ring Animation
 -------------------------------------------------- */
 
-.star {
-  display: block;
-  overflow: visible;
-  pointer-events: none;
+@keyframes starRing {
+
+  from,
+  20% {
+    animation-timing-function: ease-in;
+    opacity: 1;
+    r: 8px;
+    stroke-width: 16px;
+    transform: scale(0);
+  }
+
+  35% {
+    animation-timing-function: ease-out;
+    opacity: 0.5;
+    r: 8px;
+    stroke-width: 16px;
+    transform: scale(1);
+  }
+
+  50%,
+  to {
+    opacity: 0;
+    r: 16px;
+    stroke-width: 0;
+    transform: scale(1);
+  }
 }
 
-.star polygon {
-  transition:
-    fill 880ms ease-in-out,
-    stroke 880ms ease-in-out;
+/* --------------------------------------------------
+   Star Fill Animation
+-------------------------------------------------- */
+
+@keyframes starFill {
+
+  from,
+  40% {
+    animation-timing-function: ease-out;
+    transform: scale(0);
+  }
+
+  60% {
+    animation-timing-function: ease-in-out;
+    transform: scale(1.2);
+  }
+
+  80% {
+    transform: scale(0.9);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+/* --------------------------------------------------
+   Star Stroke Animation
+-------------------------------------------------- */
+
+@keyframes starStroke {
+  from {
+    transform: scale(1);
+  }
+
+  20%,
+  to {
+    transform: scale(0);
+  }
+}
+
+/* --------------------------------------------------
+   Star Rays Animation
+-------------------------------------------------- */
+
+@keyframes starLine {
+
+  from,
+  40% {
+    animation-timing-function: ease-out;
+    stroke-dasharray: 1 23;
+    stroke-dashoffset: 1;
+  }
+
+  60%,
+  to {
+    stroke-dasharray: 12 13;
+    stroke-dashoffset: -13;
+  }
+}
+
+/* --------------------------------------------------
+   Reduced Motion
+-------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .starRing,
+  .starFill,
+  .starLine,
+  .starStroke {
+    animation-duration: 0.01ms;
+    transition-duration: 0.01ms;
+  }
 }
