@@ -1,0 +1,404 @@
+/* src/components/BookmarkForm/BookmarkForm.module.css */
+
+/* --------------------------------------------------
+   Bookmark Form
+-------------------------------------------------- */
+
+.bookmarkForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------
+   Form Fields
+-------------------------------------------------- */
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.formField label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--headingCol);
+}
+
+.formField input,
+.formField textarea,
+.formField select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--borderColor, #d1d5db);
+  border-radius: 6px;
+  background: var(--surfaceColor, #ffffff);
+  color: var(--headingCol, #111827);
+  font: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.formField input,
+.formField select {
+  min-height: 42px;
+}
+
+.formField textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.formField input:focus,
+.formField textarea:focus,
+.formField select:focus {
+  border-color: var(--accentColor, #6366f1);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accentColor, #6366f1) 15%, transparent);
+}
+
+.formField input::placeholder,
+.formField textarea::placeholder {
+  color: var(--mutedColor, #9ca3af);
+  opacity: 1;
+}
+
+/* --------------------------------------------------
+   Form Hint
+-------------------------------------------------- */
+
+.formHint {
+  margin: -4px 0 0;
+  color: var(--mutedColor, #6b7280);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------
+   Validation Error
+-------------------------------------------------- */
+
+.formError {
+  margin: -8px 0 0;
+  color: var(--errorColor, #dc2626);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------
+   Submit Button
+-------------------------------------------------- */
+
+.formSubmit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 16px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--accentColor, #4f46e5);
+  color: #ffffff;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.formSubmit:hover {
+  filter: brightness(0.95);
+}
+
+.formSubmit:focus-visible {
+  outline: 2px solid var(--accentColor, #4f46e5);
+  outline-offset: 3px;
+}
+
+.formSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --------------------------------------------------
+   Responsive Adjustments
+-------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .bookmarkForm {
+    gap: 16px;
+  }
+}
+
+/* --------------------------------------------------
+   Form Actions
+-------------------------------------------------- */
+
+.formActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* --------------------------------------------------
+   Ghost Cancel Button
+-------------------------------------------------- */
+
+.formCancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 16px;
+  border: 1px solid var(--borderColor, #d1d5db);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--headingCol, #374151);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.formCancel:hover {
+  background: var(--surfaceColor, #f3f4f6);
+  border-color: var(--accentColor, #6366f1);
+}
+
+.formCancel:focus-visible {
+  outline: 2px solid var(--accentColor, #4f46e5);
+  outline-offset: 3px;
+}
+
+
+/* Add to src/components/BookmarkForm/BookmarkForm.module.css */
+
+/* --------------------------------------------------
+   Form Actions
+-------------------------------------------------- */
+
+.formActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* --------------------------------------------------
+   Ghost Cancel Button
+-------------------------------------------------- */
+
+.formCancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 16px;
+  border: 1px solid var(--borderColor, #d1d5db);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--headingCol, #374151);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.formCancel:hover {
+  background: var(--surfaceColor, #f3f4f6);
+  border-color: var(--accentColor, #6366f1);
+}
+
+.formCancel:focus-visible {
+  outline: 2px solid var(--accentColor, #4f46e5);
+  outline-offset: 3px;
+}
+
+/* --------------------------------------------------
+   Metadata Retrieval Status
+-------------------------------------------------- */
+
+.previewStatus {
+  margin: 0;
+  color: var(--mutedColor, #6b7280);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* --------------------------------------------------
+   Social Link Preview
+-------------------------------------------------- */
+
+.linkPreview {
+  overflow: hidden;
+  width: 100%;
+  border: 1px solid var(--borderColor, #d1d5db);
+  border-radius: 8px;
+  background: var(--surfaceColor, #ffffff);
+}
+
+.previewImageFrame {
+  width: 100%;
+  aspect-ratio: 1.91 / 1;
+  overflow: hidden;
+  background: var(--mainContentBg, #f3f4f6);
+}
+
+.previewImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.previewImageFailed {
+  display: none;
+}
+
+.previewBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+}
+
+.previewDomain {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mutedColor, #6b7280);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+
+.previewFavicon {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  object-fit: contain;
+  border-radius: 3px;
+}
+
+.previewTitle {
+  margin: 0;
+  color: var(--headingCol, #111827);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.previewDescription {
+  margin: 0;
+  color: var(--mutedColor, #6b7280);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.previewUrl {
+  margin: 0;
+  color: var(--mutedColor, #6b7280);
+  font-size: 0.75rem;
+  overflow-wrap: anywhere;
+}
+
+
+
+/* --------------------------------------------------
+   Bookmark Rating
+-------------------------------------------------- */
+
+.ratingLabel {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ratingOption {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  cursor: pointer;
+}
+
+.ratingInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.ratingStar {
+  display: block;
+  width: 22px;
+  height: 22px;
+  fill: transparent;
+  stroke: #c7cad1;
+  stroke-width: 1.8;
+  stroke-linejoin: round;
+  pointer-events: none;
+  transition:
+    fill 180ms ease,
+    stroke 180ms ease,
+    transform 180ms ease;
+}
+
+.ratingOption:hover .ratingStar,
+.ratingInput:focus-visible+.ratingStar {
+  stroke: #f4a825;
+}
+
+.ratingOption:hover .ratingStar {
+  transform: scale(1.08);
+}
+
+.ratingStarSelected {
+  fill: #f4a825;
+  stroke: #f4a825;
+}
+
+.ratingInput:focus-visible+.ratingStar {
+  outline: 2px solid var(--accentColor, #255ff4);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.ratingDescription {
+  display: block;
+  min-height: 1.25rem;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--mutedText, #717784);
+}

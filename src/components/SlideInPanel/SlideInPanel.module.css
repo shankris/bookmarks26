@@ -1,0 +1,302 @@
+/* src/components/SlideInPanel/SlideInPanel.module.css */
+
+/* --------------------------------------------------
+Main Content
+-------------------------------------------------- */
+
+.cdMainContent {
+  /* text-align: center; */
+}
+
+.cdMainContent h1 {
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--grey-300);
+  padding: 10px 10px;
+}
+
+.cdBtn {
+  position: relative;
+  display: inline-block;
+  padding: 1em 2em;
+  background-color: #89ba2c;
+  color: #ffffff;
+  border-radius: 50em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 0 5px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.cdBtn:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+@media only screen and (min-width: 1170px) {
+  .cdMainContent h1 {
+    font-size: 20px;
+  }
+}
+
+/* --------------------------------------------------
+Panel Overlay
+-------------------------------------------------- */
+
+.cdPanel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  visibility: hidden;
+  transition: visibility 0s 0.6s;
+  z-index: 100;
+}
+
+.cdPanel::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.3s 0.3s;
+}
+
+.cdPanelIsVisible {
+  visibility: visible;
+  transition: visibility 0s 0s;
+}
+
+.cdPanelIsVisible::after {
+  background: rgba(0, 0, 0, 0.6);
+  transition: background 0.3s 0s;
+}
+
+/* --------------------------------------------------
+Panel Header
+-------------------------------------------------- */
+
+.cdPanelHeader {
+  position: fixed;
+  width: 90%;
+  height: 50px;
+  line-height: 50px;
+  background: rgba(255, 255, 255, 0.96);
+  z-index: 2;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s 0s;
+  transform: translateY(-50px);
+  display: flex;
+  align-items: center;
+}
+
+.cdPanelHeader h1 {
+  color: var(--grey-400);
+  padding-left: 20px;
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.cdPanelFromRight .cdPanelHeader {
+  right: 0;
+}
+
+.cdPanelFromLeft .cdPanelHeader {
+  left: 0;
+}
+
+.cdPanelIsVisible .cdPanelHeader {
+  transition: transform 0.3s 0.3s;
+  transform: translateY(0);
+  z-index: 60;
+}
+
+@media only screen and (min-width: 768px) {
+  .cdPanelHeader {
+    width: 70%;
+  }
+}
+
+@media only screen and (min-width: 1170px) {
+  .cdPanelHeader {
+    width: 50%;
+  }
+}
+
+/* --------------------------------------------------
+Close Button
+-------------------------------------------------- */
+
+.cdPanelClose {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 60px;
+  display: inline-block;
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.cdPanelClose:disabled {
+  cursor: default;
+}
+
+.cdPanelClose::before,
+.cdPanelClose::after {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 20px;
+  height: 3px;
+  width: 20px;
+  background-color: #424f5c;
+  backface-visibility: hidden;
+}
+
+.cdPanelClose::before {
+  transform: rotate(45deg);
+}
+
+.cdPanelClose::after {
+  transform: rotate(-45deg);
+}
+
+.cdPanelClose:hover {
+  background-color: #424f5c;
+}
+
+.cdPanelClose:hover::before,
+.cdPanelClose:hover::after {
+  background-color: #ffffff;
+  transition: transform 0.3s;
+}
+
+.cdPanelClose:hover::before {
+  transform: rotate(220deg);
+}
+
+.cdPanelClose:hover::after {
+  transform: rotate(135deg);
+}
+
+.cdPanelIsVisible .cdPanelClose::before {
+  animation: cdClose1 0.6s 0.3s;
+}
+
+.cdPanelIsVisible .cdPanelClose::after {
+  animation: cdClose2 0.6s 0.3s;
+}
+
+/* --------------------------------------------------
+Close Button Animations
+-------------------------------------------------- */
+
+@keyframes cdClose1 {
+
+  0%,
+  50% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(45deg);
+  }
+}
+
+@keyframes cdClose2 {
+
+  0%,
+  50% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-45deg);
+  }
+}
+
+/* --------------------------------------------------
+Panel Container
+-------------------------------------------------- */
+
+.cdPanelContainer {
+  position: fixed;
+  width: 90%;
+  height: 100%;
+  top: 0;
+  background: #dbe2e9;
+  z-index: 1;
+  transition: transform 0.3s 0.3s;
+}
+
+.cdPanelFromRight .cdPanelContainer {
+  right: 0;
+  transform: translate3d(100%, 0, 0);
+}
+
+.cdPanelFromLeft .cdPanelContainer {
+  left: 0;
+  transform: translate3d(-100%, 0, 0);
+}
+
+.cdPanelIsVisible .cdPanelContainer {
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0s;
+  z-index: 50;
+}
+
+@media only screen and (min-width: 768px) {
+  .cdPanelContainer {
+    width: 70%;
+  }
+}
+
+@media only screen and (min-width: 1170px) {
+  .cdPanelContainer {
+    width: 50%;
+  }
+}
+
+/* --------------------------------------------------
+Panel Content
+-------------------------------------------------- */
+
+.cdPanelContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 70px 10px 10px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cdPanelContent p {
+  font-size: 14px;
+  color: #424f5c;
+  line-height: 1.6;
+  margin: 12px;
+}
+
+.cdPanelContent p:first-of-type {
+  margin-top: 0;
+}
+
+@media only screen and (min-width: 768px) {
+  .cdPanelContent p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+}

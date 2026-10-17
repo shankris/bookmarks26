@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .headingCopy {
@@ -66,7 +66,7 @@
 
 .subhead {
   color: var(--grey-400);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 300;
 }
 
@@ -86,8 +86,8 @@
   width: 42px;
   height: 42px;
   padding: 0;
-  border: 1px solid var(--borderColor, #e5e7eb);
-  border-radius: 10px;
+  border: 1px solid var(--grey-200);
+  border-radius: 8px;
   background: var(--surfaceColor);
   color: var(--headingCol);
   cursor: pointer;
@@ -184,18 +184,18 @@
   min-height: 200px;
   padding: 17px;
   overflow: hidden;
-  border: 1px solid var(--borderColor, #e5e7eb);
-  border-radius: 12px;
+  border: 1px solid var(--grey-100, #e5e7eb);
+  border-radius: 8px;
   background: var(--surfaceColor);
   color: var(--headingCol);
   box-shadow: 0 1px 3px rgb(15 23 42 / 4%);
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition: border-color 160ms ease, box-shadow 860ms ease, transform 160ms ease;
 }
 
 .bookmarkCard:hover {
-  border-color: var(--accentColor);
-  box-shadow: 0 5px 18px rgb(15 23 42 / 8%);
-  transform: translateY(-2px);
+  /* border-color: var(--accentColor); */
+  box-shadow: 0 5px 18px rgb(15 23 42 / 18%);
+  /* transform: translateY(-2px); */
 }
 
 /* --------------------------------------------------
@@ -223,7 +223,7 @@
   height: 38px;
   place-items: center;
   overflow: hidden;
-  border: 1px solid var(--borderColor, #e5e7eb);
+  border: 1px solid var(--grey-100, #e5e7eb);
   border-radius: 4px;
   background: var(--mainContentBg);
 }
@@ -279,6 +279,17 @@
   color: var(--accentColor);
 }
 
+.pageGreet {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--grey-400);
+  margin-bottom: 20px;
+}
+
+.pageGreet span {
+  color: var(--accentColor)
+}
+
 /* --------------------------------------------------
    Card Content
 -------------------------------------------------- */
@@ -307,6 +318,32 @@
 .cardContent h3 a:hover {
   color: var(--accentColor);
 }
+
+
+h3.cardTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  width: 100%;
+}
+
+h3.cardTitle a {
+  flex: 1;
+  min-width: 0;
+}
+
+h3.cardTitle svg {
+  flex-shrink: 0;
+}
+
+.titleIcon {
+  margin: 0 6px 0 0;
+  color: var(--grey-300);
+  transition: color 800ms ease-in;
+}
+
 
 .cardContent>p {
   display: -webkit-box;
@@ -351,8 +388,19 @@
   align-items: center;
   gap: 2px;
   flex-shrink: 0;
+  color: var(--grey-300);
+  transition: color 800ms ease-in;
+
+}
+
+.bookmarkCard:hover .rating {
   color: #d99a30;
 }
+
+.bookmarkCard:hover .titleIcon {
+  color: var(--accentColor);
+}
+
 
 .visits {
   display: flex;
@@ -368,6 +416,9 @@
   font-size: 10px;
   text-align: right;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 /* --------------------------------------------------
@@ -434,7 +485,9 @@
 
   .cardContent h3 {
     font-size: 15px;
+
   }
+
 
   .cardContent>p {
     font-size: 12px;

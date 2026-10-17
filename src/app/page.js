@@ -3,7 +3,10 @@
 "use client";
 
 import { useEffect, useMemo, useState, useRef } from "react";
-import { ArrowUpRight, ArrowDownUp, Eye, Search, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight, ArrowDownUp, Eye, Search, Sparkles, Star, CirclePlus, Info, Calendar, Plus } from "lucide-react";
+
+import SlideInPanel from "@/components/SlideInPanel/SlideInPanel";
+import BookmarkForm from "@/components/BookmarkForm/BookmarkForm";
 
 import styles from "./page.module.css";
 import bookmarks from "@/data/bookmarks.json";
@@ -46,14 +49,65 @@ function formatRelativeTime(dateString) {
   return `${Math.floor(days / 365)}y ago`;
 }
 
+function createSlug(value) {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/^https?:\/\//, "")
+    .replace(/\/+$/, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 /* --------------------------------------------------
    Home Page
 -------------------------------------------------- */
 
 export default function HomePage() {
-  const [sortBy, setSortBy] = useState("recent");
+  const [sortBy, setSortBy] = useState("name");
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [bookmarkItems, setBookmarkItems] = useState(bookmarks);
+
   const sortRef = useRef(null);
+
+  const categories = [...new Set(bookmarkItems.map((bookmark) => bookmark.category))].filter(Boolean);
+
+  function handleAddBookmark(formData) {
+    const baseId = createSlug(formData.domain) || "bookmark";
+    let id = baseId;
+    let suffix = 2;
+
+    // Ensure the bookmark ID is unique.
+    while (bookmarkItems.some((bookmark) => bookmark.id === id)) {
+      id = `${baseId}-${suffix}`;
+      suffix += 1;
+    }
+
+    const newBookmark = {
+      id,
+      name: formData.name,
+      url: formData.url,
+      domain: formData.domain,
+      description: formData.description,
+      category: formData.category,
+      categoryId: createSlug(formData.category),
+      rating: formData.rating,
+      visits: 0,
+      addedAt: new Date().toISOString().slice(0, 10),
+      lastVisitedAt: null,
+    };
+
+    setBookmarkItems((current) => [...current, newBookmark]);
+    setIsPanelOpen(false);
+  }
+
+  const panelData = {
+    title: "Add Bookmark",
+    subtitle: "Save a new resource",
+    content: "Add your bookmark details here.",
+    closeLabel: "Close panel",
+  };
 
   useEffect(() => {
     function handlePointerDown(event) {
@@ -78,7 +132,7 @@ export default function HomePage() {
   }, []);
 
   const sortedBookmarks = useMemo(() => {
-    return [...bookmarks].sort((a, b) => {
+    return [...bookmarkItems].sort((a, b) => {
       switch (sortBy) {
         case "name":
           return a.name.localeCompare(b.name);
@@ -102,7 +156,7 @@ export default function HomePage() {
           return b.addedAt.localeCompare(a.addedAt);
       }
     });
-  }, [sortBy]);
+  }, [bookmarkItems, sortBy]);
 
   return (
     <main className={styles.page}>
@@ -120,13 +174,26 @@ export default function HomePage() {
           <h1>
             Lets get Hyper <span>linked</span>
           </h1>
-          <div className={styles.subTitle}>A curated space for WebDev resources worth coming back to.</div>
+          <div className={styles.subhead}>A curated space for WebDev resources worth coming back to.</div>
         </div>
 
         <div
           className={styles.sortMenu}
           ref={sortRef}
         >
+          <button
+            type='button'
+            className={styles.sortButton}
+            onClick={() => setIsPanelOpen(true)}
+            aria-label='Add bookmark'
+            title='Add bookmark'
+          >
+            <CirclePlus
+              size={18}
+              aria-hidden='true'
+            />
+          </button>
+
           <button
             type='button'
             className={styles.sortButton}
@@ -184,6 +251,10 @@ export default function HomePage() {
         </div>
       </section>
 
+      <h2 className={styles.pageGreet}>
+        Welcome back <span>Shankar</span>
+      </h2>
+
       {/* Bookmark Results */}
       <section className={styles.bookmarkSection}>
         <div className={styles.bookmarkGrid}>
@@ -227,7 +298,7 @@ export default function HomePage() {
               </div>
 
               <div className={styles.cardContent}>
-                <h3>
+                <h3 className={styles.cardTitle}>
                   <a
                     href={bookmark.url}
                     target='_blank'
@@ -235,6 +306,10 @@ export default function HomePage() {
                   >
                     {bookmark.name}
                   </a>
+                  <Info
+                    size={18}
+                    className={styles.titleIcon}
+                  />
                 </h3>
 
                 <p>{bookmark.description}</p>
@@ -270,7 +345,11 @@ export default function HomePage() {
 
                 <span className={styles.addedDate}>
                   {/* Added {formatDate(bookmark.addedAt)} */}
-                  Visit: {formatRelativeTime(bookmark.lastVisitedAt)}
+                  <Calendar
+                    size={14}
+                    aria-hidden='true'
+                  />{" "}
+                  {formatRelativeTime(bookmark.lastVisitedAt)}
                 </span>
               </div>
             </article>
@@ -281,9 +360,22 @@ export default function HomePage() {
       {/* Collection Summary */}
       <footer className={styles.collectionSummary}>
         <span>
-          {bookmarks.length} {bookmarks.length === 1 ? "resource" : "resources"} in your collection
+          {bookmarkItems.length} {bookmarkItems.length === 1 ? "resource" : "resources"} in your collection
         </span>
       </footer>
+
+      <SlideInPanel
+        isOpen={isPanelOpen}
+        onClose={() => setIsPanelOpen(false)}
+        title='Add Bookmark'
+        closeLabel='Close panel'
+      >
+        <BookmarkForm
+          categories={categories}
+          onSubmit={handleAddBookmark}
+          onCancel={() => setIsPanelOpen(false)}
+        />
+      </SlideInPanel>
     </main>
   );
 }

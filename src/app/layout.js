@@ -27,10 +27,10 @@ const dmSans = DM_Sans({
 
 export const metadata = {
   title: {
-    default: "Stash — Your Bookmark Library",
-    template: "%s | Stash",
+    default: "Hyper — Your Bookmark Library",
+    template: "%s | Hyper",
   },
-  description: "Discover, organize, and revisit useful websites with Stash.",
+  description: "Discover, organize, and revisit useful websites with Hyper.",
 };
 
 /* --------------------------------------------------
