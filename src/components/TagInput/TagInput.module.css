@@ -1,0 +1,249 @@
+/* src/components/TagInput/TagInput.module.css */
+
+/* --------------------------------------------------
+Tag Input Container
+-------------------------------------------------- */
+
+.tagInput {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+}
+
+/* --------------------------------------------------
+Tag Header
+-------------------------------------------------- */
+
+.tagHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tagLabel {
+  color: var(--headingCol);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tagCount {
+  color: var(--mutedText, #737b86);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------
+Selected Tag List
+-------------------------------------------------- */
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* --------------------------------------------------
+Tag Chip
+-------------------------------------------------- */
+
+.tagChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
+  min-height: 32px;
+  padding: 4px 5px 4px 10px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 7px;
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.tagText {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tagRemove {
+  display: inline-flex;
+  flex: 0 0 22px;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--mutedText, #737b86);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.tagRemove:hover {
+  background: var(--hoverBg, #f0f2f5);
+  color: var(--headingCol, #20252b);
+}
+
+.tagRemove:focus-visible {
+  outline: 2px solid var(--accentColor, #4776e6);
+  outline-offset: 1px;
+}
+
+/* --------------------------------------------------
+Tag Entry
+-------------------------------------------------- */
+
+.tagEntry {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  width: 100%;
+  min-width: 0;
+}
+
+.tagEntry input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 8px;
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
+  font: inherit;
+  font-size: 14px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.tagEntry input::placeholder {
+  color: var(--placeholderColor, #9299a3);
+}
+
+.tagEntry input:focus {
+  outline: none;
+  border-color: var(--accentColor, #4776e6);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accentColor, #4776e6) 14%, transparent);
+}
+
+.tagEntry input:disabled {
+  background: var(--disabledBg, #f3f4f6);
+  color: var(--mutedText, #737b86);
+  cursor: not-allowed;
+}
+
+.tagAddButton {
+  display: flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 8px;
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+}
+
+.tagAddButton:hover:not(:disabled) {
+  border-color: var(--accentColor, #4776e6);
+  color: var(--accentColor, #4776e6);
+}
+
+.tagAddButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tagAddButton:focus-visible,
+.suggestionButton:focus-visible {
+  outline: 2px solid var(--accentColor, #4776e6);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------
+Keyword Suggestions
+-------------------------------------------------- */
+
+.tagSuggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.suggestionLabel {
+  color: var(--mutedText, #737b86);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.suggestionList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-width: 0;
+}
+
+.suggestionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  max-width: 100%;
+  min-height: 30px;
+  padding: 5px 9px;
+  border: 1px dashed var(--borderColor, #d7dce2);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--mutedText, #737b86);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.suggestionButton:hover {
+  border-color: var(--accentColor, #4776e6);
+  background: var(--hoverBg, #f0f2f5);
+  color: var(--accentColor, #4776e6);
+}
+
+/* --------------------------------------------------
+Dark Theme
+-------------------------------------------------- */
+
+html[data-theme="dark"] .tagChip {
+  border-color: var(--borderColor, #3a414b);
+}
+
+html[data-theme="dark"] .tagEntry input:disabled {
+  background: var(--disabledBg, #292e35);
+}
+
+html[data-theme="dark"] .suggestionButton:hover {
+  background: var(--hoverBg, #292e35);
+}

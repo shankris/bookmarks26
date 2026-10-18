@@ -1,0 +1,108 @@
+[
+  {
+    "id": "webdev",
+    "name": "WebDev",
+    "order": 1,
+    "subcategories": [
+      {
+        "id": "react",
+        "name": "React",
+        "order": 1
+      },
+      {
+        "id": "nextjs",
+        "name": "Next.js",
+        "order": 2
+      },
+      {
+        "id": "javascript",
+        "name": "JavaScript",
+        "order": 3
+      },
+      {
+        "id": "html-css",
+        "name": "HTML & CSS",
+        "order": 4
+      },
+      {
+        "id": "components",
+        "name": "Component Library",
+        "order": 4
+      },
+      {
+        "id": "gitHub",
+        "name": "Git Hub",
+        "order": 4
+      }
+    ]
+  },
+  {
+    "id": "code-codepen",
+    "name": "Code / CodePen",
+    "order": 2,
+    "subcategories": [
+      {
+        "id": "javascript",
+        "name": "JavaScript",
+        "order": 1
+      },
+      {
+        "id": "Css",
+        "name": "CSS",
+        "order": 2
+      },
+      {
+        "id": "ui",
+        "name": "User Interface",
+        "order": 3
+      },
+      {
+        "id": "ux",
+        "name": "User Experience",
+        "order": 4
+      },
+      {
+        "id": "design",
+        "name": "Design",
+        "order": 5
+      },
+      {
+        "id": "ideas",
+        "name": "Ideas",
+        "order": 6
+      },
+      {
+        "id": "top",
+        "name": "Contributor",
+        "order": 6
+      }
+    ]
+  },
+  {
+    "id": "language-learning",
+    "name": "Language Learning",
+    "order": 3,
+    "subcategories": [
+      {
+        "id": "french",
+        "name": "French",
+        "order": 1
+      },
+      {
+        "id": "german",
+        "name": "German",
+        "order": 2
+      },
+      {
+        "id": "spanish",
+        "name": "Spanish",
+        "order": 3
+      },
+      {
+        "id": "italian",
+        "name": "Italian",
+        "order": 4
+      }
+    ]
+  }
+]

@@ -279,15 +279,15 @@ Panel Content
   width: 100%;
   height: 100%;
   padding: 70px 10px 10px;
-  overflow: auto;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
 .cdPanelContent p {
-  font-size: 14px;
+  font-size: 12px;
   color: #424f5c;
   line-height: 1.6;
-  margin: 12px;
+  margin: 2px;
 }
 
 .cdPanelContent p:first-of-type {
@@ -296,7 +296,7 @@ Panel Content
 
 @media only screen and (min-width: 768px) {
   .cdPanelContent p {
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.6;
   }
 }

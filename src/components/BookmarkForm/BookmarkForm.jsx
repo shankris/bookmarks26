@@ -3,8 +3,11 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Search, X, ChevronLeft, ChevronRight, Check, Globe } from "lucide-react";
 import StarRating from "@/components/StarRating/StarRating";
+import bookmarkCategories from "@/data/bookmarkCategories.json";
 import styles from "./BookmarkForm.module.css";
+import TagInput from "@/components/TagInput/TagInput";
 
 /* --------------------------------------------------
 URL Helpers
@@ -17,21 +20,55 @@ function normalizeUrl(value) {
 }
 
 function getDomain(value) {
-  const url = new URL(normalizeUrl(value));
-
-  return url.hostname.toLowerCase().replace(/^www\./, "");
+  return new URL(normalizeUrl(value)).hostname.toLowerCase().replace(/^www\./, "");
 }
+
+function validateUrl(value) {
+  try {
+    const normalized = normalizeUrl(value);
+    const parsed = new URL(normalized);
+
+    if (!["http:", "https:"].includes(parsed.protocol) || !parsed.hostname || !parsed.hostname.includes(".")) {
+      return null;
+    }
+
+    return normalized;
+  } catch {
+    return null;
+  }
+}
+
+/* --------------------------------------------------
+Visit Frequency Options
+-------------------------------------------------- */
+
+const VISIT_FREQUENCIES = [
+  { label: "1 week", value: "1week" },
+  { label: "2 weeks", value: "2weeks" },
+  { label: "1 month", value: "1month" },
+  { label: "2 months", value: "2months" },
+  { label: "4 months", value: "4months" },
+  { label: "6 months", value: "6months" },
+  { label: "9 months", value: "9months" },
+  { label: "12 months", value: "12months" },
+];
 
 /* --------------------------------------------------
 Bookmark Form
 -------------------------------------------------- */
 
-export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
+export default function BookmarkForm({ onSubmit, onCancel }) {
+  const [step, setStep] = useState(1);
+
   const [url, setUrl] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+
+  const [categoryId, setCategoryId] = useState("");
+  const [subcategoryId, setSubcategoryId] = useState("");
+  const [tags, setTags] = useState("");
   const [rating, setRating] = useState("0");
+  const [visitFrequency, setVisitFrequency] = useState("");
 
   const [preview, setPreview] = useState(null);
   const [previewStatus, setPreviewStatus] = useState("idle");
@@ -41,35 +78,69 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
   const requestId = useRef(0);
   const lastFetchedUrl = useRef("");
 
+  const selectedCategory = bookmarkCategories.find((item) => item.id === categoryId);
+
+  const subcategories = selectedCategory?.subcategories || [];
+
+  const selectedSubcategory = subcategories.find((item) => item.id === subcategoryId);
+
+  /* --------------------------------------------------
+  Clear Website Data
+  -------------------------------------------------- */
+
+  function clearWebsiteData() {
+    requestId.current += 1;
+    lastFetchedUrl.current = "";
+
+    setUrl("");
+    setName("");
+    setDescription("");
+    setPreview(null);
+    setPreviewStatus("idle");
+    setPreviewError("");
+    setError("");
+  }
+
+  /* --------------------------------------------------
+  Reset Form
+  -------------------------------------------------- */
+
+  function resetForm() {
+    clearWebsiteData();
+
+    setCategoryId("");
+    setSubcategoryId("");
+    setTags("");
+    setRating("0");
+    setVisitFrequency("");
+    setStep(1);
+  }
+
   /* --------------------------------------------------
   Fetch Website Preview
   -------------------------------------------------- */
 
   async function fetchPreview(value) {
-    const trimmed = value.trim();
+    const normalized = validateUrl(value);
 
-    if (!trimmed) return;
-
-    let normalized;
-
-    try {
-      normalized = normalizeUrl(trimmed);
-      const parsed = new URL(normalized);
-
-      if (!["http:", "https:"].includes(parsed.protocol) || !parsed.hostname || !parsed.hostname.includes(".")) {
-        throw new Error("Invalid URL");
-      }
-    } catch {
-      setPreviewStatus("error");
-      setPreviewError("Please enter a valid website URL.");
-      return;
+    if (!normalized) {
+      setPreview(null);
+      setPreviewStatus("idle");
+      setPreviewError("");
+      setError("Please enter a valid website URL.");
+      lastFetchedUrl.current = "";
+      return false;
     }
 
-    if (lastFetchedUrl.current === normalized) return;
+    if (lastFetchedUrl.current === normalized && ["success", "error"].includes(previewStatus) && preview?.url === normalized) {
+      return true;
+    }
 
     const currentRequestId = ++requestId.current;
 
     lastFetchedUrl.current = normalized;
+
+    setPreview(null);
     setPreviewStatus("loading");
     setPreviewError("");
     setError("");
@@ -85,39 +156,55 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
 
       const data = await response.json();
 
-      if (currentRequestId !== requestId.current) return;
+      if (currentRequestId !== requestId.current) {
+        return false;
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Unable to retrieve website details.");
       }
 
-      setPreview(data);
+      const domain = data.domain || getDomain(normalized);
+
+      setPreview({
+        ...data,
+        url: normalized,
+        domain,
+        title: data.title || "",
+        description: data.description || "",
+        imageUrl: data.imageUrl || "",
+        faviconUrl: data.faviconUrl || "",
+        siteName: data.siteName || data.title || domain,
+      });
+
+      setName(data.title || data.siteName || domain);
+      setDescription(data.description || "");
       setPreviewStatus("success");
 
-      // Populate fields only when empty, so edits are not overwritten.
-      setName((current) => (current.trim() ? current : data.title || ""));
-
-      setDescription((current) => (current.trim() ? current : data.description || ""));
+      return true;
     } catch (fetchError) {
-      if (currentRequestId !== requestId.current) return;
-
-      lastFetchedUrl.current = "";
-      setPreviewStatus("error");
-      setPreviewError(fetchError.message || "We couldn't retrieve the website details. You can enter them manually.");
-
-      try {
-        setPreview({
-          url: normalized,
-          domain: getDomain(normalized),
-          title: "",
-          description: "",
-          imageUrl: "",
-          faviconUrl: "",
-          siteName: getDomain(normalized),
-        });
-      } catch {
-        setPreview(null);
+      if (currentRequestId !== requestId.current) {
+        return false;
       }
+
+      const domain = getDomain(normalized);
+
+      setPreview({
+        url: normalized,
+        domain,
+        title: "",
+        description: "",
+        imageUrl: "",
+        faviconUrl: "",
+        siteName: domain,
+      });
+
+      setName(domain);
+      setDescription("");
+      setPreviewStatus("error");
+      setPreviewError("We couldn't retrieve the website details. You can still continue.");
+
+      return true;
     }
   }
 
@@ -126,72 +213,125 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
   -------------------------------------------------- */
 
   function handleUrlChange(value) {
-    setUrl(value);
-    setError("");
-
-    // Ignore an older response if the user enters a different URL.
     requestId.current += 1;
     lastFetchedUrl.current = "";
+
+    setUrl(value);
+    setName("");
+    setDescription("");
     setPreview(null);
     setPreviewStatus("idle");
     setPreviewError("");
+    setError("");
   }
 
   /* --------------------------------------------------
-  Handle Form Submission
+  Continue To Step Two
+  -------------------------------------------------- */
+
+  async function handleNext() {
+    setError("");
+
+    const normalized = validateUrl(url);
+
+    if (!normalized) {
+      setError("Please enter a valid website URL.");
+      return;
+    }
+
+    if (!preview || preview.url !== normalized || !["success", "error"].includes(previewStatus)) {
+      const fetched = await fetchPreview(url);
+
+      if (!fetched) {
+        return;
+      }
+    }
+
+    // Do not advance if the URL changed while fetching.
+    if (requestId.current !== requestId.current || validateUrl(url) !== normalized) {
+      return;
+    }
+
+    setStep(2);
+  }
+
+  /* --------------------------------------------------
+  Select Main Category
+  -------------------------------------------------- */
+
+  function handleCategorySelect(nextCategoryId) {
+    setCategoryId(nextCategoryId);
+    setSubcategoryId("");
+    setError("");
+  }
+
+  /* --------------------------------------------------
+  Submit Bookmark
   -------------------------------------------------- */
 
   function handleSubmit(event) {
     event.preventDefault();
     setError("");
 
-    if (!url.trim() || !name.trim() || !category.trim()) {
-      setError("Please enter a website URL, name, and category.");
-      return;
-    }
+    const normalized = validateUrl(url);
 
-    let normalizedUrl;
-    let domain;
-
-    try {
-      normalizedUrl = normalizeUrl(url);
-      const parsed = new URL(normalizedUrl);
-
-      if (!["http:", "https:"].includes(parsed.protocol) || !parsed.hostname || !parsed.hostname.includes(".")) {
-        throw new Error("Invalid URL");
-      }
-
-      domain = getDomain(normalizedUrl);
-    } catch {
+    if (!normalized) {
       setError("Please enter a valid website URL.");
+      setStep(1);
       return;
     }
+
+    if (!preview || preview.url !== normalized) {
+      setError("Please retrieve the website details first.");
+      setStep(1);
+      return;
+    }
+
+    if (!selectedCategory) {
+      setError("Please select a category.");
+      return;
+    }
+
+    if (!selectedSubcategory) {
+      setError("Please select a subcategory.");
+      return;
+    }
+
+    if (!visitFrequency) {
+      setError("Please select a visit frequency.");
+      return;
+    }
+
+    const domain = getDomain(normalized);
 
     onSubmit({
-      name: name.trim(),
-      url: preview?.url || normalizedUrl,
+      name: name.trim() || preview.siteName || domain,
+      url: normalized,
       domain,
       description: description.trim(),
-      category: category.trim(),
+
+      category: selectedCategory.name,
+      categoryId: selectedCategory.id,
+
+      subcategory: selectedSubcategory.name,
+      subcategoryId: selectedSubcategory.id,
+
+      tags: tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter(Boolean),
+
       rating: Number(rating),
-      faviconUrl: preview?.faviconUrl || "",
-      previewImageUrl: preview?.imageUrl || "",
-      originalFaviconUrl: preview?.faviconUrl || "",
-      originalImageUrl: preview?.imageUrl || "",
-      siteName: preview?.siteName || domain,
+      visitFrequency,
+
+      faviconUrl: preview.faviconUrl || "",
+      previewImageUrl: preview.imageUrl || "",
+      originalFaviconUrl: preview.faviconUrl || "",
+      originalImageUrl: preview.imageUrl || "",
+      siteName: preview.siteName || domain,
     });
 
-    // Reset the form.
-    setUrl("");
-    setName("");
-    setDescription("");
-    setCategory("");
-    setRating("0");
-    setPreview(null);
-    setPreviewStatus("idle");
-    setPreviewError("");
-    setError("");
-    lastFetchedUrl.current = "";
+    resetForm();
   }
 
   /* --------------------------------------------------
@@ -203,196 +343,323 @@ export default function BookmarkForm({ categories = [], onSubmit, onCancel }) {
       className={styles.bookmarkForm}
       onSubmit={handleSubmit}
     >
-      {/* Website URL */}
+      {/* Step One: URL And Preview */}
 
-      <div className={styles.formField}>
-        <label htmlFor='bookmark-url'>Website URL *</label>
+      {step === 1 && (
+        <>
+          <div className={styles.formField}>
+            <label htmlFor='bookmark-url'>Website URL</label>
 
-        <input
-          id='bookmark-url'
-          type='url'
-          value={url}
-          onChange={(event) => handleUrlChange(event.target.value)}
-          onBlur={() => fetchPreview(url)}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              event.preventDefault();
-              fetchPreview(url);
-            }
-          }}
-          placeholder='https://ui.shadcn.com/'
-          autoComplete='url'
-          required
-        />
+            <div className={styles.urlInputRow}>
+              <div className={styles.urlInputWrapper}>
+                <input
+                  id='bookmark-url'
+                  type='text'
+                  inputMode='url'
+                  className={styles.urlInput}
+                  value={url}
+                  onChange={(event) => handleUrlChange(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" && previewStatus !== "loading") {
+                      event.preventDefault();
+                      fetchPreview(url);
+                    }
+                  }}
+                  placeholder='Paste a website URL'
+                  autoComplete='url'
+                  required
+                />
 
-        <p className={styles.formHint}>
-          Enter a URL and press <i>Enter</i> to retrieve site details.
-        </p>
-      </div>
+                {url && (
+                  <button
+                    type='button'
+                    className={styles.urlClearButton}
+                    onClick={clearWebsiteData}
+                    aria-label='Clear website URL'
+                    title='Clear URL'
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+              </div>
 
-      {/* Preview Loading */}
-
-      {previewStatus === "loading" && (
-        <p
-          className={styles.previewStatus}
-          role='status'
-        >
-          Retrieving website details…
-        </p>
-      )}
-
-      {/* Website Preview */}
-
-      {preview && (
-        <section
-          className={styles.linkPreview}
-          aria-label='Website link preview'
-        >
-          {preview.imageUrl && (
-            <div className={styles.previewImageFrame}>
-              <img
-                src={preview.imageUrl}
-                alt=''
-                className={styles.previewImage}
-                loading='lazy'
-                referrerPolicy='no-referrer'
-                onError={(event) => {
-                  event.currentTarget.closest(`.${styles.previewImageFrame}`)?.classList.add(styles.previewImageFailed);
-                }}
-              />
+              <button
+                type='button'
+                className={styles.urlFetchButton}
+                onClick={() => fetchPreview(url)}
+                disabled={!url.trim() || previewStatus === "loading"}
+                aria-label='Search website'
+                title='Retrieve website details'
+              >
+                {previewStatus === "loading" ? <span className={styles.urlLoadingIndicator} /> : <Search size={20} />}
+              </button>
             </div>
+
+            <p className={styles.formHint}>Enter a URL and select Search to retrieve its details.</p>
+          </div>
+
+          {previewStatus === "loading" && (
+            <p
+              className={styles.previewStatus}
+              role='status'
+            >
+              Retrieving website details…
+            </p>
           )}
 
-          <div className={styles.previewBody}>
-            <div className={styles.previewDomain}>
-              {preview.faviconUrl && (
+          {preview && (
+            <section
+              className={styles.linkPreview}
+              aria-label='Website link preview'
+            >
+              {preview.imageUrl && (
+                <div className={styles.previewImageFrame}>
+                  <img
+                    src={preview.imageUrl}
+                    alt=''
+                    className={styles.previewImage}
+                    loading='lazy'
+                    referrerPolicy='no-referrer'
+                    onError={(event) => {
+                      event.currentTarget.closest(`.${styles.previewImageFrame}`)?.classList.add(styles.previewImageFailed);
+                    }}
+                  />
+                </div>
+              )}
+
+              <div className={styles.previewBody}>
+                <div className={styles.previewDomain}>
+                  {preview.faviconUrl && (
+                    <img
+                      src={preview.faviconUrl}
+                      alt=''
+                      className={styles.previewFavicon}
+                      loading='lazy'
+                      referrerPolicy='no-referrer'
+                    />
+                  )}
+
+                  <span>{preview.domain}</span>
+                </div>
+
+                <h3 className={styles.previewTitle}>{name || preview.siteName || preview.domain}</h3>
+
+                {(description || preview.description) && <p className={styles.previewDescription}>{description || preview.description}</p>}
+
+                <p className={styles.previewUrl}>{preview.url}</p>
+              </div>
+            </section>
+          )}
+
+          {previewError && (
+            <p
+              className={styles.formHint}
+              role='status'
+            >
+              {previewError}
+            </p>
+          )}
+
+          {error && (
+            <p
+              className={styles.formError}
+              role='alert'
+            >
+              {error}
+            </p>
+          )}
+
+          <div className={styles.formActions}>
+            <button
+              type='button'
+              className={styles.formSubmit}
+              onClick={handleNext}
+              disabled={previewStatus === "loading" || !url.trim()}
+            >
+              Next
+              <ChevronRight size={18} />
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* Step Two: Website Summary And Bookmark Details */}
+
+      {step === 2 && (
+        <>
+          <section
+            className={styles.websiteSummary}
+            aria-label='Website details'
+          >
+            <div className={styles.websiteSummaryHeader}>
+              {preview?.faviconUrl ? (
                 <img
                   src={preview.faviconUrl}
                   alt=''
-                  className={styles.previewFavicon}
-                  loading='lazy'
+                  className={styles.summaryFavicon}
                   referrerPolicy='no-referrer'
                 />
+              ) : (
+                <span className={styles.summaryFaviconFallback}>
+                  <Globe size={22} />
+                </span>
               )}
 
-              <span>{preview.domain}</span>
+              <h3 className={styles.summaryName}>{name || preview?.siteName || preview?.domain}</h3>
             </div>
 
-            <h3 className={styles.previewTitle}>{name || preview.title || preview.siteName || preview.domain}</h3>
+            <p className={styles.summaryDescription}>{description || "No description available."}</p>
 
-            {(description || preview.description) && <p className={styles.previewDescription}>{description || preview.description}</p>}
+            <p className={styles.summaryUrl}>{url}</p>
+          </section>
 
-            <p className={styles.previewUrl}>{preview.url}</p>
+          {/* Main Categories */}
+
+          <div className={styles.formField}>
+            <span className={styles.fieldLabel}>Category *</span>
+
+            <div className={styles.selectionButtons}>
+              {bookmarkCategories
+                .slice()
+                .sort((a, b) => a.order - b.order)
+                .map((item) => {
+                  const selected = categoryId === item.id;
+
+                  return (
+                    <button
+                      key={item.id}
+                      type='button'
+                      className={`${styles.selectionButton} ${selected ? styles.selectionButtonActive : ""}`}
+                      aria-pressed={selected}
+                      onClick={() => handleCategorySelect(item.id)}
+                    >
+                      {item.name}
+
+                      {selected && <Check size={16} />}
+                    </button>
+                  );
+                })}
+            </div>
           </div>
-        </section>
-      )}
 
-      {/* Preview Error */}
+          {/* Subcategories */}
 
-      {previewError && (
-        <p
-          className={styles.formHint}
-          role='status'
-        >
-          {previewError}
-        </p>
-      )}
+          {selectedCategory && (
+            <div className={styles.formField}>
+              <span className={styles.fieldLabel}>Subcategory *</span>
 
-      {/* Website Name */}
+              <div className={styles.selectionButtons}>
+                {subcategories
+                  .slice()
+                  .sort((a, b) => a.order - b.order)
+                  .map((item) => {
+                    const selected = subcategoryId === item.id;
 
-      {/* <div className={styles.formField}>
-        <label htmlFor='bookmark-name'>Name *</label>
+                    return (
+                      <button
+                        key={item.id}
+                        type='button'
+                        className={`${styles.selectionButton} ${selected ? styles.selectionButtonActive : ""}`}
+                        aria-pressed={selected}
+                        onClick={() => {
+                          setSubcategoryId(item.id);
+                          setError("");
+                        }}
+                      >
+                        {item.name}
 
-        <input
-          id='bookmark-name'
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder='Website name'
-          required
-        />
-      </div> */}
+                        {selected && <Check size={16} />}
+                      </button>
+                    );
+                  })}
+              </div>
+            </div>
+          )}
 
-      {/* Description */}
+          {/* Tags */}
 
-      {/* <div className={styles.formField}>
-        <label htmlFor='bookmark-description'>Description</label>
+          <TagInput
+            value={tags}
+            onChange={setTags}
+            sourceTitle={preview?.title || preview?.siteName || ""}
+            sourceDescription={preview?.description || ""}
+            maxTags={10}
+          />
 
-        <textarea
-          id='bookmark-description'
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-          placeholder='What makes this resource useful?'
-          rows={4}
-        />
-      </div> */}
+          {/* Rating */}
 
-      {/* Category */}
+          <div className={styles.formField}>
+            <span className={styles.ratingLabel}>Rating</span>
 
-      <div className={styles.formField}>
-        <label htmlFor='bookmark-category'>Category *</label>
-
-        <input
-          id='bookmark-category'
-          list='bookmark-categories'
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
-          placeholder='UI Libraries'
-          required
-        />
-
-        <datalist id='bookmark-categories'>
-          {categories.map((item) => (
-            <option
-              key={item}
-              value={item}
+            <StarRating
+              name='bookmark-rating'
+              ratings={["Good", "Great", "Excellent", "Awesome", "Fantastic"]}
+              value={Number(rating)}
+              onChange={(nextRating) => setRating(String(nextRating))}
+              size={32}
             />
-          ))}
-        </datalist>
-      </div>
+          </div>
 
-      {/* Reusable Star Rating */}
+          {/* Visit Frequency */}
 
-      <div className={styles.formField}>
-        <span className={styles.ratingLabel}>Rating</span>
+          <div className={styles.formField}>
+            <span className={styles.fieldLabel}>Visit frequency *</span>
 
-        <StarRating
-          name='bookmark-rating'
-          ratings={["Good", "Great", "Excellent", "Awesome", "Fantastic"]}
-          value={Number(rating)}
-          onChange={(nextRating) => setRating(String(nextRating))}
-          size={32}
-        />
-      </div>
+            <div className={styles.frequencyButtons}>
+              {VISIT_FREQUENCIES.map((item) => {
+                const selected = visitFrequency === item.value;
 
-      {/* Form Error */}
+                return (
+                  <button
+                    key={item.value}
+                    type='button'
+                    className={`${styles.frequencyButton} ${selected ? styles.frequencyButtonActive : ""}`}
+                    aria-pressed={selected}
+                    onClick={() => {
+                      setVisitFrequency(item.value);
+                      setError("");
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-      {error && (
-        <p
-          className={styles.formError}
-          role='alert'
-        >
-          {error}
-        </p>
+          {error && (
+            <p
+              className={styles.formError}
+              role='alert'
+            >
+              {error}
+            </p>
+          )}
+
+          {/* Step Navigation */}
+
+          <div className={styles.formActions}>
+            <button
+              type='button'
+              className={styles.formCancel}
+              onClick={() => {
+                setError("");
+                setStep(1);
+              }}
+            >
+              <ChevronLeft size={18} />
+              Back
+            </button>
+
+            <button
+              type='submit'
+              className={styles.formSubmit}
+            >
+              Add Bookmark
+            </button>
+          </div>
+        </>
       )}
-
-      {/* Form Actions */}
-
-      <div className={styles.formActions}>
-        <button
-          type='submit'
-          className={styles.formSubmit}
-        >
-          Add Bookmark
-        </button>
-
-        <button
-          type='button'
-          className={styles.formCancel}
-          onClick={onCancel}
-        >
-          Cancel
-        </button>
-      </div>
     </form>
   );
 }

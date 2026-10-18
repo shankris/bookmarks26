@@ -1,0 +1,100 @@
+[
+  {
+    "id": "javascript",
+    "name": "JavaScript",
+    "category": "development",
+    "aliases": ["JS", "ECMAScript"],
+    "keywords": ["javascript", "js", "ecmascript", "scripting"]
+  },
+  {
+    "id": "react",
+    "name": "React",
+    "category": "development",
+    "aliases": ["React.js", "ReactJS"],
+    "keywords": ["react", "reactjs", "react.js", "jsx", "hooks"]
+  },
+  {
+    "id": "nextjs",
+    "name": "Next.js",
+    "category": "development",
+    "aliases": ["NextJS", "Next"],
+    "keywords": ["next.js", "nextjs", "app router", "server components"]
+  },
+  {
+    "id": "css",
+    "name": "CSS",
+    "category": "development",
+    "aliases": ["CSS3", "Cascading Style Sheets"],
+    "keywords": ["css", "styling", "stylesheets", "responsive design"]
+  },
+  {
+    "id": "web-design",
+    "name": "Web Design",
+    "category": "design",
+    "aliases": ["Website Design", "Web UI Design"],
+    "keywords": ["web design", "website design", "layout", "visual design"]
+  },
+  {
+    "id": "ui",
+    "name": "UI",
+    "category": "design",
+    "aliases": ["User Interface", "User Interfaces"],
+    "keywords": ["ui", "interface", "user interface", "interface design"]
+  },
+  {
+    "id": "ux",
+    "name": "UX",
+    "category": "design",
+    "aliases": ["User Experience"],
+    "keywords": ["ux", "user experience", "usability", "user research"]
+  },
+  {
+    "id": "tutorial",
+    "name": "Tutorial",
+    "category": "learning",
+    "aliases": ["Guide", "How-to", "Walkthrough"],
+    "keywords": ["tutorial", "guide", "how to", "walkthrough", "step by step"]
+  },
+  {
+    "id": "documentation",
+    "name": "Documentation",
+    "category": "learning",
+    "aliases": ["Docs", "API Reference"],
+    "keywords": ["documentation", "docs", "api reference", "manual"]
+  },
+  {
+    "id": "french",
+    "name": "French",
+    "category": "language",
+    "aliases": ["French Language"],
+    "keywords": ["french", "français", "francais", "vocabulary", "grammar"]
+  },
+  {
+    "id": "language-learning",
+    "name": "Language Learning",
+    "category": "language",
+    "aliases": ["Language Study", "Learn a Language"],
+    "keywords": ["language learning", "language study", "foreign language"]
+  },
+  {
+    "id": "components",
+    "name": "Components",
+    "category": "development",
+    "aliases": ["UI Components", "Reusable Components", "React Components"],
+    "keywords": ["components", "reusable components", "component library"]
+  },
+  {
+    "id": "templates",
+    "name": "Templates",
+    "category": "resources",
+    "aliases": ["Website Templates", "Starter Templates"],
+    "keywords": ["templates", "starter template", "boilerplate", "starter kit"]
+  },
+  {
+    "id": "dashboard",
+    "name": "Dashboard",
+    "category": "design",
+    "aliases": ["Admin Dashboard", "Analytics Dashboard"],
+    "keywords": ["dashboard", "admin panel", "analytics dashboard", "control panel"]
+  }
+]

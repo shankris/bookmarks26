@@ -1,135 +1,222 @@
 /* src/components/BookmarkForm/BookmarkForm.module.css */
 
 /* --------------------------------------------------
-   Bookmark Form
+Bookmark Form
 -------------------------------------------------- */
 
 .bookmarkForm {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: 100%;
-  max-width: 500px;
+  width: 90%;
+  min-width: 0;
   margin: 0 auto;
 }
 
 /* --------------------------------------------------
-   Form Fields
+Form Fields
 -------------------------------------------------- */
 
 .formField {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 100%;
+  min-width: 0;
 }
 
-.formField label {
-  font-size: 0.875rem;
-  font-weight: 600;
+.formField label,
+.fieldLabel,
+.ratingLabel {
   color: var(--headingCol);
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.formField input,
-.formField textarea,
-.formField select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--borderColor, #d1d5db);
-  border-radius: 6px;
-  background: var(--surfaceColor, #ffffff);
-  color: var(--headingCol, #111827);
-  font: inherit;
-  font-size: 0.9rem;
-  outline: none;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.formField input,
-.formField select {
-  min-height: 42px;
-}
-
+.formField input:not([type="checkbox"]),
 .formField textarea {
-  min-height: 100px;
-  resize: vertical;
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 8px;
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
+  font: inherit;
+  font-size: 14px;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .formField input:focus,
 .formField textarea:focus,
-.formField select:focus {
-  border-color: var(--accentColor, #6366f1);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accentColor, #6366f1) 15%, transparent);
+.urlInput:focus {
+  outline: none;
+  border-color: var(--accentColor, #4776e6);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accentColor, #4776e6) 14%, transparent);
 }
 
-.formField input::placeholder,
-.formField textarea::placeholder {
-  color: var(--mutedColor, #9ca3af);
-  opacity: 1;
+.formField textarea {
+  min-height: 84px;
+  resize: vertical;
+  line-height: 1.5;
 }
 
-/* --------------------------------------------------
-   Rating Label
--------------------------------------------------- */
-
-.ratingLabel {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-
-/* --------------------------------------------------
-   Form Hint
--------------------------------------------------- */
-
-p.formHint {
-  color: var(--mutedColor, #6b7280);
+.formHint {
+  margin: 0;
+  color: var(--mutedText, #737b86);
   font-size: 12px;
   line-height: 1.5;
 }
 
-/* --------------------------------------------------
-   Validation Error
--------------------------------------------------- */
-
 .formError {
-  margin: -8px 0 0;
-  color: var(--errorColor, #dc2626);
-  font-size: 0.875rem;
+  margin: 0;
+  color: var(--errorColor, #c0392b);
+  font-size: 13px;
   line-height: 1.5;
 }
 
 /* --------------------------------------------------
-   Metadata Retrieval Status
+URL Input
+-------------------------------------------------- */
+
+.urlInputRow {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+}
+
+.urlInputWrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.urlInput {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 11px 42px 11px 12px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 8px;
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
+  font: inherit;
+  font-size: 14px;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.urlInput::placeholder,
+.formField input::placeholder,
+.formField textarea::placeholder {
+  color: var(--placeholderColor, #9299a3);
+}
+
+.urlClearButton {
+  position: absolute;
+  top: 50%;
+  right: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--mutedText, #737b86);
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.urlClearButton:hover {
+  background: var(--hoverBg, #f0f2f5);
+  color: var(--headingCol, #20252b);
+}
+
+.urlFetchButton {
+  display: flex;
+  flex: 0 0 46px;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0;
+  border: 1px solid var(--accentColor, #4776e6);
+  border-radius: 8px;
+  background: var(--accentColor, #4776e6);
+  color: #fff;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.urlFetchButton:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.urlFetchButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.urlLoadingIndicator {
+  width: 19px;
+  height: 19px;
+  border: 2px solid rgb(255 255 255 / 40%);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: urlSpin 700ms linear infinite;
+}
+
+@keyframes urlSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --------------------------------------------------
+Preview Status
 -------------------------------------------------- */
 
 .previewStatus {
   margin: 0;
-  color: var(--mutedColor, #6b7280);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  color: var(--mutedText, #737b86);
+  font-size: 13px;
 }
 
 /* --------------------------------------------------
-   Social Link Preview
+Website Preview — Step One
 -------------------------------------------------- */
 
 .linkPreview {
+  width: 95%;
+  margin: 0 auto;
   overflow: hidden;
-  width: 100%;
-  border: 1px solid var(--borderColor, #d1d5db);
-  border-radius: 8px;
-  background: var(--surfaceColor, #ffffff);
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 10px;
+  background: var(--surfaceColor, #fff);
 }
 
 .previewImageFrame {
-  overflow: hidden;
   width: 100%;
-  aspect-ratio: 1.91 / 1;
-  background: var(--mainContentBg, #f3f4f6);
+  max-height: 407px;
+  aspect-ratio: 16 / 8.4;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--previewBg, #f1f3f6);
 }
 
 .previewImage {
@@ -147,140 +234,330 @@ p.formHint {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
   padding: 14px;
 }
 
 .previewDomain {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: var(--mutedColor, #6b7280);
-  font-size: 0.75rem;
-  text-transform: uppercase;
+  gap: 7px;
+  color: var(--mutedText, #737b86);
+  font-size: 12px;
   overflow-wrap: anywhere;
 }
 
 .previewFavicon {
-  flex: 0 0 20px;
-  width: 20px;
-  height: 20px;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
-  border-radius: 3px;
 }
 
 .previewTitle {
   margin: 0;
-  color: var(--headingCol, #111827);
-  font-size: 1rem;
+  color: var(--headingCol, #20252b);
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
 
 .previewDescription {
+  display: -webkit-box;
+  overflow: hidden;
   margin: 0;
-  color: var(--mutedColor, #6b7280);
-  font-size: 0.875rem;
-  line-height: 1.5;
+  color: var(--mutedText, #737b86);
+  font-size: 13px;
+  line-height: 1.55;
   overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 
 .previewUrl {
   margin: 0;
-  color: var(--mutedColor, #6b7280);
-  font-size: 0.75rem;
+  color: var(--accentColor, #4776e6);
+  font-size: 12px;
   overflow-wrap: anywhere;
 }
 
 /* --------------------------------------------------
-   Form Actions
+Website Summary — Step Two
+-------------------------------------------------- */
+
+.websiteSummary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 10px;
+  background: var(--surfaceColor, #fff);
+}
+
+.websiteSummaryHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.summaryFavicon,
+.summaryFaviconFallback {
+  display: flex;
+  flex: 0 0 36px;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.summaryFavicon {
+  object-fit: contain;
+  padding: 5px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  background: #fff;
+}
+
+.summaryFaviconFallback {
+  background: var(--hoverBg, #f0f2f5);
+  color: var(--mutedText, #737b86);
+}
+
+.summaryName {
+  min-width: 0;
+  margin: 0;
+  color: var(--headingCol, #20252b);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.summaryDescription {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--mutedText, #737b86);
+  font-size: 13px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.summaryUrl {
+  margin: 0;
+  color: var(--accentColor, #4776e6);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* --------------------------------------------------
+Category And Subcategory Buttons
+-------------------------------------------------- */
+
+.selectionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selectionButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  max-width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 8px;
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.selectionButton:hover {
+  border-color: var(--accentColor, #4776e6);
+}
+
+.selectionButtonActive {
+  border-color: var(--accentColor, #4776e6);
+  background: var(--selectedBg, #edf3ff);
+  color: var(--accentColor, #315fc5);
+  font-weight: 600;
+}
+
+.selectionButton:focus-visible,
+.frequencyButton:focus-visible,
+.formSubmit:focus-visible,
+.formCancel:focus-visible,
+.urlFetchButton:focus-visible,
+.urlClearButton:focus-visible {
+  outline: 2px solid var(--accentColor, #4776e6);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------
+Visit Frequency Buttons
+-------------------------------------------------- */
+
+.frequencyButtons {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.frequencyButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 6px;
+  border: 1px solid var(--borderColor, #d7dce2);
+  border-radius: 8px;
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.frequencyButton:hover {
+  border-color: var(--accentColor, #4776e6);
+}
+
+.frequencyButtonActive {
+  border-color: var(--accentColor, #4776e6);
+  background: var(--selectedBg, #edf3ff);
+  color: var(--accentColor, #315fc5);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------
+Form Actions
 -------------------------------------------------- */
 
 .formActions {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-/* --------------------------------------------------
-   Submit Button
--------------------------------------------------- */
-
-.formSubmit {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 44px;
-  padding: 11px 16px;
-  border: 1px solid transparent;
-  border-radius: 6px;
-  background: var(--accentColor, #4f46e5);
-  color: #ffffff;
-  font: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
 }
 
-.formSubmit:hover {
-  filter: brightness(0.95);
-}
-
-.formSubmit:focus-visible {
-  outline: 2px solid var(--accentColor, #4f46e5);
-  outline-offset: 3px;
-}
-
-.formSubmit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* --------------------------------------------------
-   Cancel Button
--------------------------------------------------- */
-
+.formSubmit,
 .formCancel {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  min-height: 44px;
-  padding: 11px 16px;
-  border: 1px solid var(--borderColor, #d1d5db);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--headingCol, #374151);
+  gap: 7px;
+  min-height: 42px;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: 8px;
   font: inherit;
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    opacity 160ms ease;
+}
+
+.formSubmit {
+  margin-left: auto;
+  border-color: var(--accentColor, #4776e6);
+  background: var(--accentColor, #4776e6);
+  color: #fff;
+}
+
+.formSubmit:hover:not(:disabled) {
+  opacity: 0.88;
+}
+
+.formSubmit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.formCancel {
+  border-color: var(--borderColor, #d7dce2);
+  background: var(--surfaceColor, #fff);
+  color: var(--headingCol, #20252b);
 }
 
 .formCancel:hover {
-  background: var(--surfaceColor, #f3f4f6);
-  border-color: var(--accentColor, #6366f1);
-}
-
-.formCancel:focus-visible {
-  outline: 2px solid var(--accentColor, #4f46e5);
-  outline-offset: 3px;
+  background: var(--hoverBg, #f0f2f5);
 }
 
 /* --------------------------------------------------
-   Responsive Adjustments
+Responsive Layout
 -------------------------------------------------- */
 
 @media (max-width: 480px) {
   .bookmarkForm {
-    gap: 16px;
+    gap: 17px;
   }
+
+  .frequencyButtons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .selectionButton {
+    min-height: 36px;
+    padding: 8px 10px;
+  }
+
+  .formActions {
+    gap: 10px;
+  }
+
+  .formSubmit,
+  .formCancel {
+    min-height: 42px;
+    padding: 10px 12px;
+  }
+
+  .previewImageFrame {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* --------------------------------------------------
+Dark Theme Adjustments
+-------------------------------------------------- */
+
+html[data-theme="dark"] .summaryFavicon {
+  border-color: var(--borderColor, #3a414b);
+  background: #fff;
+}
+
+html[data-theme="dark"] .selectionButtonActive,
+html[data-theme="dark"] .frequencyButtonActive {
+  background: var(--selectedBg, #263956);
+  color: var(--accentColor, #91b4ff);
 }
