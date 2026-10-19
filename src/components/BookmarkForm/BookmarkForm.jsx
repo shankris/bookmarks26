@@ -394,8 +394,6 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
                 {previewStatus === "loading" ? <span className={styles.urlLoadingIndicator} /> : <Search size={20} />}
               </button>
             </div>
-
-            <p className={styles.formHint}>Enter a URL and select Search to retrieve its details.</p>
           </div>
 
           {previewStatus === "loading" && (
@@ -429,6 +427,10 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
 
               <div className={styles.previewBody}>
                 <div className={styles.previewDomain}>
+                  <span>{preview.domain}</span>
+                </div>
+
+                <h3 className={styles.previewTitle}>
                   {preview.faviconUrl && (
                     <img
                       src={preview.faviconUrl}
@@ -438,11 +440,8 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
                       referrerPolicy='no-referrer'
                     />
                   )}
-
-                  <span>{preview.domain}</span>
-                </div>
-
-                <h3 className={styles.previewTitle}>{name || preview.siteName || preview.domain}</h3>
+                  <span>{name || preview.siteName || preview.domain}</span>
+                </h3>
 
                 {(description || preview.description) && <p className={styles.previewDescription}>{description || preview.description}</p>}
 
@@ -468,6 +467,47 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
               {error}
             </p>
           )}
+
+          {/* Rating */}
+
+          <div className={styles.formField}>
+            <span className={styles.ratingLabel}>Rating</span>
+
+            <StarRating
+              name='bookmark-rating'
+              ratings={["Good", "Great", "Excellent", "Awesome", "Fantastic"]}
+              value={Number(rating)}
+              onChange={(nextRating) => setRating(String(nextRating))}
+              size={32}
+            />
+          </div>
+
+          {/* Visit Frequency */}
+
+          <div className={styles.formField}>
+            <span className={styles.fieldLabel}>Visit frequency *</span>
+
+            <div className={styles.frequencyButtons}>
+              {VISIT_FREQUENCIES.map((item) => {
+                const selected = visitFrequency === item.value;
+
+                return (
+                  <button
+                    key={item.value}
+                    type='button'
+                    className={`${styles.frequencyButton} ${selected ? styles.frequencyButtonActive : ""}`}
+                    aria-pressed={selected}
+                    onClick={() => {
+                      setVisitFrequency(item.value);
+                      setError("");
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
           <div className={styles.formActions}>
             <button

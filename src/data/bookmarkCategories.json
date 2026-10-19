@@ -27,12 +27,12 @@
       {
         "id": "components",
         "name": "Component Library",
-        "order": 4
+        "order": 5
       },
       {
         "id": "gitHub",
         "name": "Git Hub",
-        "order": 4
+        "order": 6
       }
     ]
   },
@@ -53,12 +53,12 @@
       },
       {
         "id": "ui",
-        "name": "User Interface",
+        "name": "UI",
         "order": 3
       },
       {
         "id": "ux",
-        "name": "User Experience",
+        "name": "UX",
         "order": 4
       },
       {
@@ -74,7 +74,7 @@
       {
         "id": "top",
         "name": "Contributor",
-        "order": 6
+        "order": 7
       }
     ]
   },

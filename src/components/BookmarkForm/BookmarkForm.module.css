@@ -199,7 +199,6 @@ Website Preview — Step One
 -------------------------------------------------- */
 
 .linkPreview {
-  width: 95%;
   margin: 0 auto;
   overflow: hidden;
   border: 1px solid var(--borderColor, #d7dce2);
@@ -255,6 +254,10 @@ Website Preview — Step One
 }
 
 .previewTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
   margin: 0;
   color: var(--headingCol, #20252b);
   font-size: 16px;

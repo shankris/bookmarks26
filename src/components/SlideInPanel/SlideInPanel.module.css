@@ -273,14 +273,12 @@ Panel Content
 -------------------------------------------------- */
 
 .cdPanelContent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  width: 90%;
   height: 100%;
   padding: 70px 10px 10px;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   -webkit-overflow-scrolling: touch;
+  margin: 0 auto;
 }
 
 .cdPanelContent p {
