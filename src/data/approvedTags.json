@@ -25,7 +25,7 @@
     "name": "CSS",
     "category": "development",
     "aliases": ["CSS3", "Cascading Style Sheets"],
-    "keywords": ["css", "styling", "stylesheets", "responsive design"]
+    "keywords": ["css", "styling", "stylesheets", "Tailwind", "Bootstrap", "responsive design"]
   },
   {
     "id": "web-design",

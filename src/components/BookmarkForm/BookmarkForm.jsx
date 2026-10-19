@@ -4,23 +4,67 @@
 
 import { useRef, useState } from "react";
 import { Search, X, ChevronLeft, ChevronRight, Check, Globe } from "lucide-react";
+
+import bookmarks from "@/data/bookmarks.json";
 import StarRating from "@/components/StarRating/StarRating";
 import bookmarkCategories from "@/data/bookmarkCategories.json";
-import styles from "./BookmarkForm.module.css";
 import TagInput from "@/components/TagInput/TagInput";
+
+import styles from "./BookmarkForm.module.css";
 
 /* --------------------------------------------------
 URL Helpers
 -------------------------------------------------- */
 
-function normalizeUrl(value) {
-  const trimmed = value.trim();
+/* src/components/BookmarkForm/BookmarkForm.jsx */
 
-  return /^[a-z][a-z\d+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+function normalizeUrl(value) {
+  let input = value.trim();
+
+  if (!input) {
+    return "";
+  }
+
+  // Add a default domain ending only when none is provided.
+  const withoutProtocol = input.replace(/^[a-zA-Z][a-zA-Z\d+.-]*:\/\//, "");
+  const hostname = withoutProtocol.split(/[/?#]/)[0];
+
+  if (hostname && !hostname.includes(".") && hostname !== "localhost") {
+    input = input.replace(hostname, `${hostname}.com`);
+  }
+
+  // Add HTTPS when the user has not specified a protocol.
+  if (!/^[a-zA-Z][a-zA-Z\d+.-]*:\/\//.test(input)) {
+    input = `https://${input}`;
+  }
+
+  try {
+    return new URL(input).toString();
+  } catch {
+    return "";
+  }
 }
 
 function getDomain(value) {
   return new URL(normalizeUrl(value)).hostname.toLowerCase().replace(/^www\./, "");
+}
+
+function BookmarkFavicon({ id }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return <Globe size={18} />;
+  }
+
+  return (
+    <img
+      src={`/favicons/${id}.png`}
+      alt=''
+      className={styles.suggestionFavicon}
+      loading='lazy'
+      onError={() => setFailed(true)}
+    />
+  );
 }
 
 function validateUrl(value) {
@@ -83,6 +127,25 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
   const subcategories = selectedCategory?.subcategories || [];
 
   const selectedSubcategory = subcategories.find((item) => item.id === subcategoryId);
+
+  /* --------------------------------------------------
+  Recent And Matching Bookmarks
+  -------------------------------------------------- */
+
+  const recentBookmarks = bookmarks
+    .slice()
+    .sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt))
+    .slice(0, 5);
+
+  const matchingBookmarks = url.trim()
+    ? bookmarks
+        .filter((bookmark) => {
+          const searchTerm = url.trim().toLowerCase();
+
+          return bookmark.name.toLowerCase().includes(searchTerm) || bookmark.url.toLowerCase().includes(searchTerm) || bookmark.domain.toLowerCase().includes(searchTerm);
+        })
+        .slice(0, 5)
+    : recentBookmarks;
 
   /* --------------------------------------------------
   Clear Website Data
@@ -396,68 +459,115 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
             </div>
           </div>
 
-          {previewStatus === "loading" && (
-            <p
-              className={styles.previewStatus}
-              role='status'
-            >
-              Retrieving website details…
-            </p>
-          )}
+          {/* Website Preview And Suggestions */}
 
-          {preview && (
-            <section
-              className={styles.linkPreview}
-              aria-label='Website link preview'
-            >
-              {preview.imageUrl && (
-                <div className={styles.previewImageFrame}>
-                  <img
-                    src={preview.imageUrl}
-                    alt=''
-                    className={styles.previewImage}
-                    loading='lazy'
-                    referrerPolicy='no-referrer'
-                    onError={(event) => {
-                      event.currentTarget.closest(`.${styles.previewImageFrame}`)?.classList.add(styles.previewImageFailed);
-                    }}
-                  />
-                </div>
-              )}
-
-              <div className={styles.previewBody}>
-                <div className={styles.previewDomain}>
-                  <span>{preview.domain}</span>
-                </div>
-
-                <h3 className={styles.previewTitle}>
-                  {preview.faviconUrl && (
+          <div className={styles.previewArea}>
+            {preview ? (
+              <section
+                className={styles.linkPreview}
+                aria-label='Website link preview'
+              >
+                {preview.imageUrl && (
+                  <div className={styles.previewImageFrame}>
                     <img
-                      src={preview.faviconUrl}
+                      src={preview.imageUrl}
                       alt=''
-                      className={styles.previewFavicon}
+                      className={styles.previewImage}
                       loading='lazy'
                       referrerPolicy='no-referrer'
+                      onError={(event) => {
+                        event.currentTarget.closest(`.${styles.previewImageFrame}`)?.classList.add(styles.previewImageFailed);
+                      }}
                     />
-                  )}
-                  <span>{name || preview.siteName || preview.domain}</span>
-                </h3>
+                  </div>
+                )}
 
-                {(description || preview.description) && <p className={styles.previewDescription}>{description || preview.description}</p>}
+                <div className={styles.previewBody}>
+                  <div className={styles.previewDomain}>
+                    <span>{preview.domain}</span>
+                  </div>
 
-                <p className={styles.previewUrl}>{preview.url}</p>
-              </div>
-            </section>
-          )}
+                  <h3 className={styles.previewTitle}>
+                    {preview.faviconUrl && (
+                      <img
+                        src={preview.faviconUrl}
+                        alt=''
+                        className={styles.previewFavicon}
+                        loading='lazy'
+                        referrerPolicy='no-referrer'
+                      />
+                    )}
+                    <span>{name || preview.siteName || preview.domain}</span>
+                  </h3>
 
-          {previewError && (
-            <p
-              className={styles.formHint}
-              role='status'
-            >
-              {previewError}
-            </p>
-          )}
+                  {(description || preview.description) && <p className={styles.previewDescription}>{description || preview.description}</p>}
+
+                  <p className={styles.previewUrl}>{preview.url}</p>
+                </div>
+              </section>
+            ) : (
+              <section
+                className={styles.bookmarkSuggestions}
+                aria-label={url.trim() ? "Matching bookmarks" : "Recently added bookmarks"}
+              >
+                <p className={styles.suggestionsHeading}>{url.trim() ? "Matching bookmarks" : "Recently added"}</p>
+
+                {matchingBookmarks.length > 0 ? (
+                  <div className={styles.suggestionsList}>
+                    {matchingBookmarks.map((bookmark) => (
+                      <button
+                        key={bookmark.id}
+                        type='button'
+                        className={styles.suggestionItem}
+                        onClick={() => {
+                          handleUrlChange(bookmark.url);
+                          fetchPreview(bookmark.url);
+                        }}
+                      >
+                        <span className={styles.suggestionIcon}>
+                          <img
+                            src={`/favicons/${bookmark.id}.png`}
+                            alt=''
+                            className={styles.suggestionIcon}
+                            loading='lazy'
+                            onError={(event) => {
+                              event.currentTarget.style.display = "none";
+                            }}
+                          />
+                        </span>
+
+                        <span className={styles.suggestionDetails}>
+                          <span className={styles.suggestionName}>{bookmark.name}</span>
+
+                          <span className={styles.suggestionUrl}>{bookmark.url}</span>
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={styles.suggestionsEmpty}>New Link to Hyper</p>
+                )}
+              </section>
+            )}
+
+            {previewStatus === "loading" && (
+              <p
+                className={styles.previewStatus}
+                role='status'
+              >
+                Retrieving website details…
+              </p>
+            )}
+
+            {previewError && (
+              <p
+                className={styles.formHint}
+                role='status'
+              >
+                {previewError}
+              </p>
+            )}
+          </div>
 
           {error && (
             <p
@@ -625,47 +735,6 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
             sourceDescription={preview?.description || ""}
             maxTags={10}
           />
-
-          {/* Rating */}
-
-          <div className={styles.formField}>
-            <span className={styles.ratingLabel}>Rating</span>
-
-            <StarRating
-              name='bookmark-rating'
-              ratings={["Good", "Great", "Excellent", "Awesome", "Fantastic"]}
-              value={Number(rating)}
-              onChange={(nextRating) => setRating(String(nextRating))}
-              size={32}
-            />
-          </div>
-
-          {/* Visit Frequency */}
-
-          <div className={styles.formField}>
-            <span className={styles.fieldLabel}>Visit frequency *</span>
-
-            <div className={styles.frequencyButtons}>
-              {VISIT_FREQUENCIES.map((item) => {
-                const selected = visitFrequency === item.value;
-
-                return (
-                  <button
-                    key={item.value}
-                    type='button'
-                    className={`${styles.frequencyButton} ${selected ? styles.frequencyButtonActive : ""}`}
-                    aria-pressed={selected}
-                    onClick={() => {
-                      setVisitFrequency(item.value);
-                      setError("");
-                    }}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
 
           {error && (
             <p

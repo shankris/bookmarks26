@@ -204,6 +204,8 @@ Website Preview — Step One
   border: 1px solid var(--borderColor, #d7dce2);
   border-radius: 10px;
   background: var(--surfaceColor, #fff);
+  min-height: 240px;
+  box-sizing: border-box;
 }
 
 .previewImageFrame {
@@ -563,4 +565,127 @@ html[data-theme="dark"] .selectionButtonActive,
 html[data-theme="dark"] .frequencyButtonActive {
   background: var(--selectedBg, #263956);
   color: var(--accentColor, #91b4ff);
+}
+
+
+/* src/components/BookmarkForm/BookmarkForm.module.css */
+
+/* --------------------------------------------------
+   Preview And Suggestion Area
+-------------------------------------------------- */
+
+.previewArea {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  overflow: hidden;
+}
+
+.bookmarkSuggestions {
+  min-height: 100%;
+  overflow-y: auto;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  background: var(--surface-bg);
+}
+
+/* --------------------------------------------------
+   Suggestion Heading
+-------------------------------------------------- */
+
+.suggestionsHeading {
+  margin: 0 0 var(--space-2);
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------
+   Suggestion List
+-------------------------------------------------- */
+
+.suggestionsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.suggestionItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 2px 4px;
+  margin: 1px 2px 0;
+  border-bottom: 1px solid var(--grey-200);
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.suggestionItem:hover {
+  background: var(--surface-hover);
+}
+
+.suggestionItem:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: -2px;
+}
+
+/* --------------------------------------------------
+   Suggestion Icon
+-------------------------------------------------- */
+
+.suggestionIcon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------
+   Suggestion Text
+-------------------------------------------------- */
+
+.suggestionDetails {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.suggestionName {
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.suggestionUrl {
+  overflow: hidden;
+  color: var(--grey-400);
+  font-size: var(--font-size-xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------
+   Empty Suggestions State
+-------------------------------------------------- */
+
+.suggestionsEmpty {
+  margin: var(--space-4) 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
 }
