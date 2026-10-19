@@ -3,6 +3,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+
 import { Search, X, ChevronLeft, ChevronRight, Check, Globe } from "lucide-react";
 
 import bookmarks from "@/data/bookmarks.json";
@@ -101,7 +104,8 @@ const VISIT_FREQUENCIES = [
 Bookmark Form
 -------------------------------------------------- */
 
-export default function BookmarkForm({ onSubmit, onCancel }) {
+export default function BookmarkForm({ onCancel }) {
+  const [isSaving, setIsSaving] = useState(false);
   const [step, setStep] = useState(1);
 
   const [url, setUrl] = useState("");
@@ -329,11 +333,14 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
   }
 
   /* --------------------------------------------------
-  Submit Bookmark
+  Submit Bookmark To Firestore
   -------------------------------------------------- */
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+
+    if (isSaving) return;
+
     setError("");
 
     const normalized = validateUrl(url);
@@ -365,9 +372,16 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
       return;
     }
 
+    const user = auth.currentUser;
+
+    if (!user) {
+      setError("Please sign in before adding a bookmark.");
+      return;
+    }
+
     const domain = getDomain(normalized);
 
-    onSubmit({
+    const bookmarkData = {
       name: name.trim() || preview.siteName || domain,
       url: normalized,
       domain,
@@ -392,9 +406,42 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
       originalFaviconUrl: preview.faviconUrl || "",
       originalImageUrl: preview.imageUrl || "",
       siteName: preview.siteName || domain,
-    });
 
-    resetForm();
+      // Ownership and approval
+      createdBy: user.uid,
+      status: "pending",
+
+      // Initial statistics
+      visits: 0,
+      addedAt: new Date().toISOString().slice(0, 10),
+      lastVisitedAt: null,
+
+      // Firestore timestamps
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+
+    setIsSaving(true);
+
+    try {
+      await addDoc(collection(db, "bookmarks"), bookmarkData);
+
+      // Reset only after Firestore confirms a successful write.
+      resetForm();
+
+      // Close the slide-in panel after saving.
+      onCancel?.();
+    } catch (saveError) {
+      console.error("Unable to save bookmark:", saveError);
+
+      if (saveError.code === "permission-denied") {
+        setError("You do not have permission to save this bookmark. Check your sign-in status and Firestore rules.");
+      } else {
+        setError("We couldn't save your bookmark. Please try again.");
+      }
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   /* --------------------------------------------------
@@ -763,8 +810,9 @@ export default function BookmarkForm({ onSubmit, onCancel }) {
             <button
               type='submit'
               className={styles.formSubmit}
+              disabled={isSaving}
             >
-              Add Bookmark
+              {isSaving ? "Saving..." : "Add Bookmark"}
             </button>
           </div>
         </>
